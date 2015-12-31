@@ -1,0 +1,371 @@
+<!-- mathjax config similar to math.stackexchange -->
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  jax: ["input/TeX", "output/HTML-CSS"],
+  tex2jax: {
+    inlineMath: [ ['$', '$'] ],
+    displayMath: [ ['$$', '$$']],
+    processEscapes: true,
+    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+  },
+  messageStyle: "none",
+  "HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"] }
+});
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML" type="text/javascript"></script>
+<!-- Start original default octopress content-->
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Parameter Sweep Bash Script - Ben Lindsay</title>
+  <meta name="author" content="Ben Lindsay">
+
+  
+  <meta name="description" content="In my polymer field theory research, often my studies involve running a bunch of simulations where I pick one or more input parameters and change &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://benlindsay.github.io/blog/2015/12/parameter-sweep-bash-script/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="" rel="alternate" title="Ben Lindsay" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="/javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  
+  <nav role="navigation"><!-- If statement conditionally excludes RSS feed symbol -->
+
+  
+<ul class="main-navigation">
+  <li><a href="/">Ben Lindsay</a></li>
+  <li><a href="/blog">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Parameter Sweep Bash Script</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2015-12-19T11:09:40-05:00'><span class='date'><span class='date-month'>Dec</span> <span class='date-day'>19</span><span class='date-suffix'>th</span>, <span class='date-year'>2015</span></span> <span class='time'>11:09 am</span></time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>In my polymer field theory research, often my studies involve running a bunch of simulations where I pick one or more input parameters and change them over a range of values, then compare the results of each separate simulation to see how that/those variable(s) affect the system I’m simulating. This kind of study is called a “parameter sweep”, and can also be referred to as “embarrassingly parallel”, because the processor(s) for each for each individual job don’t need to communicate with the processor(s) from any other job. It can be very tedious to manually create input files for each job, so I wrote a bash script to help me out.</p>
+
+<!--more-->
+
+<p>For example, if I want to simulate 3 different polymer nanocomposite systems, each with a different nanorod length, I could manually create 3 directories like so:</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+</pre></td><td class="code"><pre><code class=""><span class="line">mkdir length1
+</span><span class="line">mkdir length2
+</span><span class="line">mkdir length3</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>Then I could copy an input file, <code>bcp.input</code>, and a submit file, <code>sub.sh</code> into each of those folders like so:</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+</pre></td><td class="code"><pre><code class="bash"><span class="line"><span class="k">for</span> d in length*/ <span class="p">;</span> <span class="k">do</span>
+</span><span class="line">  cp bcp.input <span class="s2">&quot;$d&quot;</span>
+</span><span class="line">  cp sub.sh <span class="s2">&quot;$d&quot;</span>
+</span><span class="line"><span class="k">done</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>Then I could proceed to manually edit all 6 files (or just 3 if the submission script doesn’t have to change). If it’s just 3 files, it’s not too bad, but if I want to run 10 or 20 simulations with slight changes in the input file for each one, manual editing gets real tedious real fast. I got fed up with it and wrote a script to do all the editing for me. The script is called <code>param-sweep.sh</code>. Feel free to look at it on <a href="https://github.com/benlindsay/param-sweep.git">GitHub</a>.</p>
+
+<p>Before running the script, I make a template for the input file and submission script with parameter names that the script will replace with parameter values. My input file template could look something like this:</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+</pre></td><td class="code"><pre><code class="bash"><span class="line"><span class="m">1000</span>        <span class="c"># Number of iterations</span>
+</span><span class="line"><span class="m">60</span>          <span class="c"># Polymer length</span>
+</span><span class="line"><span class="m">1</span>           <span class="c"># Nanorod radius</span>
+</span><span class="line">NRLENGTH    <span class="c"># Nanorod length</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>and my submission script template could look something like this:</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+</pre></td><td class="code"><pre><code class="bash"><span class="line"><span class="c">#!/bin/sh</span>
+</span><span class="line"><span class="c">#PBS -N TRIALNAME</span>
+</span><span class="line"><span class="c">#PBS -l nodes=1:ppn=12</span>
+</span><span class="line"><span class="c">#PBS -l walltime=01:00:00,mem=2gb</span>
+</span><span class="line">
+</span><span class="line"><span class="nb">cd</span> <span class="nv">$PBS_O_WORKDIR</span>
+</span><span class="line">
+</span><span class="line"><span class="c"># Run code that looks for bcp.input in the current directory</span>
+</span><span class="line">mpirun <span class="nv">$HOME</span>/code/awesome_code.exe
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>In this example, I want to replace <code>NRLENGTH</code> with the actual nanorod length for each <code>bcp.input</code> file in <code>./length1</code>, <code>./length2</code>, and <code>./length3</code>, and I want to replace <code>TRIALNAME</code> with a name corresponding to each simulation in each <code>sub.sh</code> file. The script does this by looking through a <code>trials.txt</code> file I make that would look like this in this case:</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+</pre></td><td class="code"><pre><code class=""><span class="line">name        i:NRLENGTH  s:TRIALNAME
+</span><span class="line">length1     4           length1-trial
+</span><span class="line">length2     5           length2-trial
+</span><span class="line">length3     6           length3-trial</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>The <code>i:</code> and <code>s:</code> before <code>NRLENGTH</code> and <code>TRIALNAME</code>, respectively, tell the script to look in the input file or submission script for each variable. Finally, let’s look at how to use the script:</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+<span class="line-number">16</span>
+<span class="line-number">17</span>
+<span class="line-number">18</span>
+<span class="line-number">19</span>
+<span class="line-number">20</span>
+<span class="line-number">21</span>
+<span class="line-number">22</span>
+<span class="line-number">23</span>
+<span class="line-number">24</span>
+<span class="line-number">25</span>
+<span class="line-number">26</span>
+<span class="line-number">27</span>
+<span class="line-number">28</span>
+</pre></td><td class="code"><pre><code class=""><span class="line">$ ls
+</span><span class="line">bcp.input   trials.txt  sub.sh
+</span><span class="line">$ ~/scripts/param-sweep.sh -t trials.txt -i bcp.input -s sub.sh
+</span><span class="line">Trials file:        trials.txt 
+</span><span class="line">Input file:         bcp.input
+</span><span class="line">Submission script:  sub.sh
+</span><span class="line">3 trials
+</span><span class="line">2 vars
+</span><span class="line">Submitting trial length1:
+</span><span class="line">1443364.rrlogin.internal
+</span><span class="line">Submitting trial length2:
+</span><span class="line">1443365.rrlogin.internal
+</span><span class="line">Submitting trial length3:
+</span><span class="line">1443366.rrlogin.internal
+</span><span class="line">$ tree
+</span><span class="line">.
+</span><span class="line">├── bcp.input
+</span><span class="line">├── length1
+</span><span class="line">│   ├── bcp.input
+</span><span class="line">│   └── sub.sh
+</span><span class="line">├── length2
+</span><span class="line">│   ├── bcp.input
+</span><span class="line">│   └── sub.sh
+</span><span class="line">├── length3
+</span><span class="line">│   ├── bcp.input
+</span><span class="line">│   └── sub.sh
+</span><span class="line">├── sub.sh
+</span><span class="line">└── trials.txt</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>So the script made directories for all three simulations, replaced <code>NRLENGTH</code> with <code>4</code>, <code>5</code>, and <code>6</code> in the <code>bcp.input</code> files, replaced <code>TRIALNAME</code> with <code>length1-trial</code>, <code>length2-trial</code>, and <code>length3-trial</code> in the <code>sub.sh</code> files, and submitted the <code>sub.sh</code> files from within their respective simulation directories. In this case, since my script expects files with the names I used, I could have just typed <code>~/scripts/param-sweep.sh</code>. If I wanted to be able to check the files before submitting, I could have typed <code>~/scripts/param-sweep.sh -n</code> which would create the directories and files without submitting the jobs.</p>
+
+<p>A few caveats: the script isn’t currently set up to handle more than one layer of simulation directories. Also, the script as it’s set up right now copies whatever input file and submission script its fed to files named <code>bcp.input</code> and <code>sub.sh</code>. Finally, you’ll need to make sure that the variable name you want the script to find and replace with variable values doesn’t show up anywhere else in the file. The script will find and replace all instances of the variable name (case sensitive).</p>
+
+<p>This script has saved me a lot of time. Hopefully it can help someone else out there too.</p>
+
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Ben Lindsay</span></span>
+
+      
+
+
+
+
+<time class='entry-date' datetime='2015-12-19T11:09:40-05:00'><span class='date'><span class='date-month'>Dec</span> <span class='date-day'>19</span><span class='date-suffix'>th</span>, <span class='date-year'>2015</span></span> <span class='time'>11:09 am</span></time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/bash/'>bash</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://benlindsay.github.io/blog/2015/12/parameter-sweep-bash-script/" data-via="" data-counturl="http://benlindsay.github.io/blog/2015/12/parameter-sweep-bash-script/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+      
+        <a class="basic-alignment right" href="/blog/2015/12/getting-more-out-of-vim/" title="Next Post: Getting More Out of Vim">Getting More Out of Vim &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section id="aside-icons">
+  <span class="fa-stack fa-lg">
+    <a href="mailto:benjlindsay@gmail.com">
+      <i class="fa fa-envelope-square fa-stack-2x"></i>
+    </a>
+  </span>
+  <span class="fa-stack fa-lg">
+    <a href="https://github.com/benlindsay">
+      <i class="fa fa-github-square fa-stack-2x"></i>
+    </a>
+  </span>
+  <span class="fa-stack fa-lg">
+    <a href="https://www.linkedin.com/in/benjamin-lindsay-b1012028">
+      <i class="fa fa-linkedin-square fa-stack-2x"></i>
+    </a>
+  </span>
+</section>
+<section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2015/12/getting-more-out-of-vim/">Getting More Out of Vim</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/12/parameter-sweep-bash-script/">Parameter Sweep Bash Script</a>
+      </li>
+    
+  </ul>
+</section>
+<section class="category-list">
+  <h1>Categories</h1>
+    <ul id="category-list"><li><a href='/blog/categories/bash'>bash (1)</a></li><li><a href='/blog/categories/vim'>vim (1)</a></li></ul>
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2015 - Ben Lindsay -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'benlindsay';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://benlindsay.github.io/blog/2015/12/parameter-sweep-bash-script/';
+        var disqus_url = 'http://benlindsay.github.io/blog/2015/12/parameter-sweep-bash-script/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

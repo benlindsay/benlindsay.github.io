@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Ben Lindsay]]></title>
+  <link href="http://benlindsay.github.io/atom.xml" rel="self"/>
+  <link href="http://benlindsay.github.io/"/>
+  <updated>2015-12-31T17:42:39-05:00</updated>
+  <id>http://benlindsay.github.io/</id>
+  <author>
+    <name><![CDATA[Ben Lindsay]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Getting More Out of Vim]]></title>
+    <link href="http://benlindsay.github.io/blog/2015/12/getting-more-out-of-vim/"/>
+    <updated>2015-12-24T08:53:11-05:00</updated>
+    <id>http://benlindsay.github.io/blog/2015/12/getting-more-out-of-vim</id>
+    <content type="html"><![CDATA[<p>For those of you who don’t know, Vim is a powerful command-line text editor. It is the improved version of it’s predecessor, Vi (in fact, it stands for Vi IMproved). I’m a big fan of Vim for coding and text editing. I started using it a few years ago only because it was the only way I knew how to edit files when SSH-ing onto a remote Linux machine. Now that I’ve spent time learning how to use it right, I find it faster than any GUI text editor I’ve used before. There is a somewhat steep learning curve, but if you do a lot of coding or plain-text editing, it’s definitely worth investing some time to learn how to use Vim right. Hopefully this post can provide some direction if you are intimidated by Vim like I was when I first started.</p>
+
+<!--more-->
+
+<p>If you’re just starting Vim and need some basic directions, I’d look at <a href="http://computers.tutsplus.com/tutorials/vim-for-beginners--cms-21118">this tutorial</a>, although in my opinion you can skip the stuff about relative line numbering. I prefer absolute line numbering. A good reference to look back at after going through this tutorial can be found <a href="https://simpletutorials.com/c/1238/Simple+Vim+Reference">here</a>. Even these introductory materials have a <em>lot</em> of commands though, so I’ll summarize the steps I’d recommend taking to getting more out of Vim.</p>
+
+<h2 id="install-vim-pathogen">1. Install Vim-Pathogen</h2>
+
+<p>Before anything else, I want to put in a plug for <a href="https://github.com/tpope/vim-pathogen">Vim-Pathogen</a>. To get the most out of Vim, you might want to add a some plugins for things like file system navigation (<a href="https://github.com/scrooloose/nerdtree">NERD Tree</a>), auto-closing parentheses and brackets (<a href="https://github.com/Townk/vim-autoclose">Vim-Autoclose</a>), and writing and compiling LaTeX files (<a href="https://github.com/LaTeX-Box-Team/LaTeX-Box">LaTeX-Box</a>). Once you install <a href="https://github.com/tpope">Tim Pope</a>’s <a href="https://github.com/tpope/vim-pathogen">Vim-Pathogen</a> script, installing any new plugins is super easy.</p>
+
+<p>Setting up Vim-Pathogen itself is pretty easy too. Just follow the instructions on <a href="https://github.com/tpope/vim-pathogen">github.com/tpope/vim-pathogen</a>. At the end of your setup, you will have a <code>.vim</code> folder in your home directory organized like this:</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+</pre></td><td class="code"><pre><code class=""><span class="line">$ tree ~/.vim
+</span><span class="line">.
+</span><span class="line">├── autoload
+</span><span class="line">│   └── pathogen.vim
+</span><span class="line">└── bundle</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>From there, all you ever need to do to install a plugin is find the plugin repository on GitHub and <code>git clone</code> it in your <code>~/.vim/bundle</code> folder. For example, to install the NERD Tree plugin, you would:</p>
+
+<ol>
+  <li>Google something like “vim nerd tree”</li>
+  <li>Find the link to a GitHub repo (<a href="https://github.com/scrooloose/nerdtree">https://github.com/scrooloose/nerdtree</a>)</li>
+  <li><code>cd ~/.vim/bundle</code></li>
+  <li><code>git clone https://github.com/scrooloose/nerdtree</code></li>
+  <li>Open Vim and type <code>:Helptags</code> to update the help menu in Vim.</li>
+</ol>
+
+<p>And just like that you’re all set up with your new plugin. If you ever want to remove or temporarily disable a plugin, just delete the cloned repo (<code>rm -rf ~/.vim/bundle/nerdtree</code>) or move it somewhere else (<code>mv ~/.vim/bundle/nerdtree /any/other/path</code>).</p>
+
+<h2 id="practice-navigation">2. Practice Navigation</h2>
+
+<p>The ability to navigate around Vim without having to leave the keyboard home row is in my opinion its biggest time-saving feature, but it takes a bit of practice to get the hang of it. The resources I listed above are great references to look back on if you forget some commands.</p>
+
+<p>The best thing to start practicing is maneuvering with the <code>hjkl</code> keys instead of the arrow keys. It’s strange at first, but it becomes second nature soon enough. To make best use of this navigation technique, keep in mind that you want to be in <strong>Normal</strong> mode instead of <strong>Insert</strong> mode any time you aren’t adding text to your file. Get in the habit of hitting <code>ESC</code> or the equivalent <code>CTRL-C</code> (I prefer <code>CTRL-C</code>) any time you take a break from typing so you don’t start adding a bunch of h’s, j’s, k’s , and l’s to your file. Here’s a silly <a href="http://vim-adventures.com">game</a> you can play if you want to have fun while practicing Vim navigation.</p>
+
+<p>Here’s a short list of the other navigation techniques (all used in <strong>Normal</strong> mode) I use most frequently:</p>
+
+<ul>
+  <li>Navigation Between Lines
+    <ol>
+      <li><code>28G</code> moves to line 28. Have <code>:set nu</code> typed somewhere in your <code>~/.vimrc</code> file so the line numbers show up when you’re in Vim.</li>
+      <li><code>gg</code> or <code>G</code> move to the top or bottom of the file, respectively.</li>
+      <li><code>/foo</code> moves to the next place “foo” is found in the document (case sensitive). Typing <code>n</code> then moves to the next one and typing <code>N</code> moves to the previous one.</li>
+    </ol>
+  </li>
+  <li>Navigation Within a Line
+    <ol>
+      <li><code>0</code> and <code>$</code> move to the beggining and end of the line, respectively.</li>
+      <li><code>W</code> and <code>B</code> are good ways to move right and left, respectively, faster than <code>h</code> and <code>l</code>. They move forward and backword one WORD. (In Vim, WORDS ar)</li>
+      <li><code>fh</code> moves to the next occurrence of the character “h” within the line. <code>th</code> does the same thing but places the cursor just before the “h” instead of right on it.</li>
+    </ol>
+  </li>
+</ul>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Parameter Sweep Bash Script]]></title>
+    <link href="http://benlindsay.github.io/blog/2015/12/parameter-sweep-bash-script/"/>
+    <updated>2015-12-19T11:09:40-05:00</updated>
+    <id>http://benlindsay.github.io/blog/2015/12/parameter-sweep-bash-script</id>
+    <content type="html"><![CDATA[<p>In my polymer field theory research, often my studies involve running a bunch of simulations where I pick one or more input parameters and change them over a range of values, then compare the results of each separate simulation to see how that/those variable(s) affect the system I’m simulating. This kind of study is called a “parameter sweep”, and can also be referred to as “embarrassingly parallel”, because the processor(s) for each for each individual job don’t need to communicate with the processor(s) from any other job. It can be very tedious to manually create input files for each job, so I wrote a bash script to help me out.</p>
+
+<!--more-->
+
+<p>For example, if I want to simulate 3 different polymer nanocomposite systems, each with a different nanorod length, I could manually create 3 directories like so:</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+</pre></td><td class="code"><pre><code class=""><span class="line">mkdir length1
+</span><span class="line">mkdir length2
+</span><span class="line">mkdir length3</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>Then I could copy an input file, <code>bcp.input</code>, and a submit file, <code>sub.sh</code> into each of those folders like so:</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+</pre></td><td class="code"><pre><code class="bash"><span class="line"><span class="k">for</span> d in length*/ <span class="p">;</span> <span class="k">do</span>
+</span><span class="line">  cp bcp.input <span class="s2">&quot;$d&quot;</span>
+</span><span class="line">  cp sub.sh <span class="s2">&quot;$d&quot;</span>
+</span><span class="line"><span class="k">done</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>Then I could proceed to manually edit all 6 files (or just 3 if the submission script doesn’t have to change). If it’s just 3 files, it’s not too bad, but if I want to run 10 or 20 simulations with slight changes in the input file for each one, manual editing gets real tedious real fast. I got fed up with it and wrote a script to do all the editing for me. The script is called <code>param-sweep.sh</code>. Feel free to look at it on <a href="https://github.com/benlindsay/param-sweep.git">GitHub</a>.</p>
+
+<p>Before running the script, I make a template for the input file and submission script with parameter names that the script will replace with parameter values. My input file template could look something like this:</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+</pre></td><td class="code"><pre><code class="bash"><span class="line"><span class="m">1000</span>        <span class="c"># Number of iterations</span>
+</span><span class="line"><span class="m">60</span>          <span class="c"># Polymer length</span>
+</span><span class="line"><span class="m">1</span>           <span class="c"># Nanorod radius</span>
+</span><span class="line">NRLENGTH    <span class="c"># Nanorod length</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>and my submission script template could look something like this:</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+</pre></td><td class="code"><pre><code class="bash"><span class="line"><span class="c">#!/bin/sh</span>
+</span><span class="line"><span class="c">#PBS -N TRIALNAME</span>
+</span><span class="line"><span class="c">#PBS -l nodes=1:ppn=12</span>
+</span><span class="line"><span class="c">#PBS -l walltime=01:00:00,mem=2gb</span>
+</span><span class="line">
+</span><span class="line"><span class="nb">cd</span> <span class="nv">$PBS_O_WORKDIR</span>
+</span><span class="line">
+</span><span class="line"><span class="c"># Run code that looks for bcp.input in the current directory</span>
+</span><span class="line">mpirun <span class="nv">$HOME</span>/code/awesome_code.exe
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>In this example, I want to replace <code>NRLENGTH</code> with the actual nanorod length for each <code>bcp.input</code> file in <code>./length1</code>, <code>./length2</code>, and <code>./length3</code>, and I want to replace <code>TRIALNAME</code> with a name corresponding to each simulation in each <code>sub.sh</code> file. The script does this by looking through a <code>trials.txt</code> file I make that would look like this in this case:</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+</pre></td><td class="code"><pre><code class=""><span class="line">name        i:NRLENGTH  s:TRIALNAME
+</span><span class="line">length1     4           length1-trial
+</span><span class="line">length2     5           length2-trial
+</span><span class="line">length3     6           length3-trial</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>The <code>i:</code> and <code>s:</code> before <code>NRLENGTH</code> and <code>TRIALNAME</code>, respectively, tell the script to look in the input file or submission script for each variable. Finally, let’s look at how to use the script:</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+<span class="line-number">16</span>
+<span class="line-number">17</span>
+<span class="line-number">18</span>
+<span class="line-number">19</span>
+<span class="line-number">20</span>
+<span class="line-number">21</span>
+<span class="line-number">22</span>
+<span class="line-number">23</span>
+<span class="line-number">24</span>
+<span class="line-number">25</span>
+<span class="line-number">26</span>
+<span class="line-number">27</span>
+<span class="line-number">28</span>
+</pre></td><td class="code"><pre><code class=""><span class="line">$ ls
+</span><span class="line">bcp.input   trials.txt  sub.sh
+</span><span class="line">$ ~/scripts/param-sweep.sh -t trials.txt -i bcp.input -s sub.sh
+</span><span class="line">Trials file:        trials.txt 
+</span><span class="line">Input file:         bcp.input
+</span><span class="line">Submission script:  sub.sh
+</span><span class="line">3 trials
+</span><span class="line">2 vars
+</span><span class="line">Submitting trial length1:
+</span><span class="line">1443364.rrlogin.internal
+</span><span class="line">Submitting trial length2:
+</span><span class="line">1443365.rrlogin.internal
+</span><span class="line">Submitting trial length3:
+</span><span class="line">1443366.rrlogin.internal
+</span><span class="line">$ tree
+</span><span class="line">.
+</span><span class="line">├── bcp.input
+</span><span class="line">├── length1
+</span><span class="line">│   ├── bcp.input
+</span><span class="line">│   └── sub.sh
+</span><span class="line">├── length2
+</span><span class="line">│   ├── bcp.input
+</span><span class="line">│   └── sub.sh
+</span><span class="line">├── length3
+</span><span class="line">│   ├── bcp.input
+</span><span class="line">│   └── sub.sh
+</span><span class="line">├── sub.sh
+</span><span class="line">└── trials.txt</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>So the script made directories for all three simulations, replaced <code>NRLENGTH</code> with <code>4</code>, <code>5</code>, and <code>6</code> in the <code>bcp.input</code> files, replaced <code>TRIALNAME</code> with <code>length1-trial</code>, <code>length2-trial</code>, and <code>length3-trial</code> in the <code>sub.sh</code> files, and submitted the <code>sub.sh</code> files from within their respective simulation directories. In this case, since my script expects files with the names I used, I could have just typed <code>~/scripts/param-sweep.sh</code>. If I wanted to be able to check the files before submitting, I could have typed <code>~/scripts/param-sweep.sh -n</code> which would create the directories and files without submitting the jobs.</p>
+
+<p>A few caveats: the script isn’t currently set up to handle more than one layer of simulation directories. Also, the script as it’s set up right now copies whatever input file and submission script its fed to files named <code>bcp.input</code> and <code>sub.sh</code>. Finally, you’ll need to make sure that the variable name you want the script to find and replace with variable values doesn’t show up anywhere else in the file. The script will find and replace all instances of the variable name (case sensitive).</p>
+
+<p>This script has saved me a lot of time. Hopefully it can help someone else out there too.</p>
+
+]]></content>
+  </entry>
+  
+</feed>
