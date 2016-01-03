@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Vim | Ben Lindsay]]></title>
   <link href="http://benlindsay.github.io/blog/categories/vim/atom.xml" rel="self"/>
   <link href="http://benlindsay.github.io/"/>
-  <updated>2016-01-01T10:52:44-05:00</updated>
+  <updated>2016-01-03T11:33:05-05:00</updated>
   <id>http://benlindsay.github.io/</id>
   <author>
     <name><![CDATA[Ben Lindsay]]></name>
@@ -22,7 +22,7 @@
 
 <!--more-->
 
-<p>If you’re just starting Vim and need some basic directions, I’d look at <a href="http://computers.tutsplus.com/tutorials/vim-for-beginners--cms-21118">this tutorial</a>, although in my opinion you can skip the stuff about relative line numbering. I prefer absolute line numbering. A good reference to look back at after going through this tutorial can be found <a href="https://simpletutorials.com/c/1238/Simple+Vim+Reference">here</a>. Even these introductory materials have a <em>lot</em> of commands though, so I’ll summarize the steps I’d recommend taking to getting more out of Vim.</p>
+<p>If you’re just starting Vim and need some basic directions, I’d look at <a href="http://computers.tutsplus.com/tutorials/vim-for-beginners--cms-21118">this tutorial</a>. A good reference to look back at after going through this tutorial can be found <a href="https://simpletutorials.com/c/1238/Simple+Vim+Reference">here</a>. Even these introductory materials have a <em>lot</em> of commands though, so I’ll summarize the steps I’d recommend taking to getting more out of Vim.</p>
 
 <h2 id="install-vim-pathogen">1. Install Vim-Pathogen</h2>
 
@@ -58,23 +58,24 @@ $ tree ~/.vim
 
 <p>Here’s a short list of the other navigation techniques (all used in <strong>Normal</strong> mode) I use most frequently:</p>
 
-<ul>
-  <li>Navigation Between Lines
-    <ol>
-      <li><code>28G</code> moves to line 28. Have <code>:set nu</code> typed somewhere in your <code>~/.vimrc</code> file so the line numbers show up when you’re in Vim.</li>
-      <li><code>gg</code> or <code>G</code> move to the top or bottom of the file, respectively.</li>
-      <li><code>/foo</code> moves to the next place “foo” is found in the document (case sensitive). Typing <code>n</code> then moves to the next one and typing <code>N</code> moves to the previous one.</li>
-    </ol>
-  </li>
-  <li>Navigation Within a Line
-    <ol>
-      <li><code>0</code> and <code>$</code> move to the beggining and end of the line, respectively.</li>
-      <li><code>W</code> and <code>B</code> are good ways to move right and left, respectively, faster than <code>h</code> and <code>l</code>. They move forward and backword one WORD. (In Vim, WORDS ar)</li>
-      <li><code>fh</code> moves to the next occurrence of the character “h” within the line. <code>th</code> does the same thing but places the cursor just before the “h” instead of right on it.</li>
-    </ol>
-  </li>
-</ul>
+<ol>
+  <li>Typing a number before <code>h</code>, <code>j</code>, <code>k</code>, or <code>l</code> navigates in that direction that number of times. For example, <code>10j</code> moves down 10 lines.</li>
+  <li><code>28G</code> moves to line 28. Have <code>:set nu</code> typed somewhere in your <code>~/.vimrc</code> file so the line numbers show up when you’re in Vim.</li>
+  <li><code>gg</code> or <code>G</code> move to the top or bottom of the file, respectively.</li>
+  <li><code>/foo</code> moves to the next place “foo” is found in the document (case sensitive). Typing <code>n</code> then moves to the next one and typing <code>N</code> moves to the previous one.</li>
+  <li><code>0</code> and <code>$</code> move to the beggining and end of the line, respectively.</li>
+  <li><code>W</code> and <code>B</code> take you to the beginning of the next WORD and previous WORD, respectivley. In Vim, WORDS are chunks of text separated by white space and words are more like normal words. For example, in a line that looks like <code>words-making/up.a!big~WORD WORD-2</code>, typing <code>W</code> would take you to the beginning of <code>WORD-2</code>, whereas typing <code>w</code> or <code>b</code>, which navigate between vim words (instead of WORDS), would hit all the <code>-/.!~</code> characters in addition to the beginnings of english words.</li>
+  <li><code>fh</code> moves to the next occurrence of the character “h” within the line. <code>th</code> does the same thing but places the cursor just before the “h” instead of right on it.</li>
+  <li><code>{</code> and <code>}</code> take you to the previous and next paragraph, respectively. <code>(</code> and <code>)</code> do the same with sentences. This is really nice when typing a lot of text as opposed to code. You can still use them with code, but they’re just not as predictable.</li>
+</ol>
 
+<h2 id="learn-to-speak-vim">3. Learn to Speak Vim</h2>
+
+<p>What I mean by this is that Vim has a unique command syntax that makes it easy to supercharge your commands. Yan Pritzker has a great post about this <a href="http://yanpritzker.com/2011/12/16/learn-to-speak-vim-verbs-nouns-and-modifiers/">here</a>.</p>
+
+<p>In addition to the <code>&lt;verb&gt;&lt;modifier&gt;&lt;text object&gt;</code> syntax explained in the article, there is also a useful <code>&lt;verb&gt;&lt;navigation command&gt;</code> syntax that I frequently use. A typical example is something like <code>d3j</code>. Here, <code>d</code> is the verb for delete, and <code>3j</code> tells Vim how far to go, in this case, down 3 lines. So <code>d3j</code> deletes the current line and the following 3 lines. You can use any of the navigation commands mentioned above in place of <code>3j</code> and any verb in place of <code>d</code>. Common verbs are <code>c</code> for change (delete specified region and enter insert mode) and <code>y</code> for yank (Vim’s word for copy, where p or P can be used to paste what you copy).</p>
+
+<p>No go out and practice this stuff, and hopefully you’ll see why so many people swear by Vim. If you have thoughts, comments, corrections, or additions you’d like to see, let me know!</p>
 ]]></content>
   </entry>
   
