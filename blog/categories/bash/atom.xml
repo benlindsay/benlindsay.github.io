@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[Category: Bash | Ben Lindsay]]></title>
+  <title><![CDATA[Category: Bash, | Ben Lindsay]]></title>
   <link href="http://benlindsay.github.io/blog/categories/bash/atom.xml" rel="self"/>
   <link href="http://benlindsay.github.io/"/>
-  <updated>2016-01-03T11:33:05-05:00</updated>
+  <updated>2016-01-08T08:25:49-05:00</updated>
   <id>http://benlindsay.github.io/</id>
   <author>
     <name><![CDATA[Ben Lindsay]]></name>
