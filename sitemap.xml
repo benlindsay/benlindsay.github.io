@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>http://benlindsay.github.io/blog/2016/01/life-is-better-with-git/</loc>
+    <lastmod>2016-01-05T21:36:17-05:00</lastmod>
+  </url>
+  <url>
     <loc>http://benlindsay.github.io/blog/2015/12/getting-more-out-of-vim/</loc>
     <lastmod>2015-12-24T08:53:11-05:00</lastmod>
   </url>
@@ -25,5 +29,8 @@
   </url>
   <url>
     <loc>http://benlindsay.github.io/blog/categories/vim/</loc>
+  </url>
+  <url>
+    <loc>http://benlindsay.github.io/blog/categories/git/</loc>
   </url>
 </urlset>

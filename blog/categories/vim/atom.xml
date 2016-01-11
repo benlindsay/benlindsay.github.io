@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[Category: Vim, | Ben Lindsay]]></title>
+  <title><![CDATA[Category: Vim | Ben Lindsay]]></title>
   <link href="http://benlindsay.github.io/blog/categories/vim/atom.xml" rel="self"/>
   <link href="http://benlindsay.github.io/"/>
-  <updated>2016-01-09T17:12:03-05:00</updated>
+  <updated>2016-01-10T22:45:44-05:00</updated>
   <id>http://benlindsay.github.io/</id>
   <author>
     <name><![CDATA[Ben Lindsay]]></name>

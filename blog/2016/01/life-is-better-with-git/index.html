@@ -1,24 +1,103 @@
-<?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom">
+<!-- mathjax config similar to math.stackexchange -->
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  jax: ["input/TeX", "output/HTML-CSS"],
+  tex2jax: {
+    inlineMath: [ ['$', '$'] ],
+    displayMath: [ ['$$', '$$']],
+    processEscapes: true,
+    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+  },
+  messageStyle: "none",
+  "HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"] }
+});
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML" type="text/javascript"></script>
+<!-- Start original default octopress content-->
 
-  <title><![CDATA[Ben Lindsay]]></title>
-  <link href="http://benlindsay.github.io/atom.xml" rel="self"/>
-  <link href="http://benlindsay.github.io/"/>
-  <updated>2016-01-10T22:45:44-05:00</updated>
-  <id>http://benlindsay.github.io/</id>
-  <author>
-    <name><![CDATA[Ben Lindsay]]></name>
-    
-  </author>
-  <generator uri="http://octopress.org/">Octopress</generator>
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Life Is Better With Git - Ben Lindsay</title>
+  <meta name="author" content="Ben Lindsay">
 
   
-  <entry>
-    <title type="html"><![CDATA[Life Is Better With Git]]></title>
-    <link href="http://benlindsay.github.io/blog/2016/01/life-is-better-with-git/"/>
-    <updated>2016-01-05T21:36:17-05:00</updated>
-    <id>http://benlindsay.github.io/blog/2016/01/life-is-better-with-git</id>
-    <content type="html"><![CDATA[<p>If you’ve heard of Git, you probably think of it mainly as a tool that allows teams of developers to collaborate on a project. While version control systems like Git are crucial for multi-developer projects, it is still highly valuable even if you’re the only one who touches your code. If you’re someone who codes regularly (even if the code is only a couple hundred lines long) and you don’t use any form of version control software (like Git, Mercurial, or SVN), then this post is for you. My goal with this post is to show you that even if you can survive without Git, life is better with it.</p>
+  <meta name="description" content="If you’ve heard of Git, you probably think of it mainly as a tool that allows teams of developers to collaborate on a project. While version control &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://benlindsay.github.io/blog/2016/01/life-is-better-with-git/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="" rel="alternate" title="Ben Lindsay" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="/javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-71898636-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  
+  <nav role="navigation"><!-- If statement conditionally excludes RSS feed symbol -->
+
+  
+<ul class="main-navigation">
+  <li><a href="/">Ben Lindsay</a></li>
+  <li><a href="/blog">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Life Is Better With Git</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2016-01-05T21:36:17-05:00'><span class='date'><span class='date-month'>Jan</span> <span class='date-day'>5</span><span class='date-suffix'>th</span>, <span class='date-year'>2016</span></span> <span class='time'>9:36 pm</span></time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>If you’ve heard of Git, you probably think of it mainly as a tool that allows teams of developers to collaborate on a project. While version control systems like Git are crucial for multi-developer projects, it is still highly valuable even if you’re the only one who touches your code. If you’re someone who codes regularly (even if the code is only a couple hundred lines long) and you don’t use any form of version control software (like Git, Mercurial, or SVN), then this post is for you. My goal with this post is to show you that even if you can survive without Git, life is better with it.</p>
 
 <!--more-->
 
@@ -217,15 +296,15 @@
 
 <p>Next, sign in to Bitbucket, select “Create” in the menu bar, then click on “Create repository” in the drop-down menu.</p>
 
-<p><img src="http://benlindsay.github.io/images/bitbucket_menu_create_repo.png" alt="Bitbucket Repositories Menu" title="Bitbucket Repositories Menu" /></p>
+<p><img src="/images/bitbucket_menu_create_repo.png" alt="Bitbucket Repositories Menu" title="Bitbucket Repositories Menu" /></p>
 
 <p>This will bring up a page shown below. For repository name, I usually make it match my project name on my computer, but I put “cool-project” here instead of “awesome-project” just to prove that it doesn’t have to match. Leave “This is a private repository” checked if you only want people to be able to see the project if you give them access rights. If you uncheck it, anyone with the URL can see your project. It’s not necessary to select the language of your project, but there’s no reason not to.</p>
 
-<p><img src="http://benlindsay.github.io/images/bitbucket_create_new_repo_page.png" alt="Bitbucket Create New Repository Page" title="Bitbucket Create New Repository Page" /></p>
+<p><img src="/images/bitbucket_create_new_repo_page.png" alt="Bitbucket Create New Repository Page" title="Bitbucket Create New Repository Page" /></p>
 
 <p>After clicking “Create repository”, you’ll be taken to <code>bitbucket.org/yourusername/cool-project,</code> which will look like this:</p>
 
-<p><img src="http://benlindsay.github.io/images/bitbucket_repo_setup_page.png" alt="Bitbucket Repository Setup Page" title="Bitbucket Repository Setup Page" /></p>
+<p><img src="/images/bitbucket_repo_setup_page.png" alt="Bitbucket Repository Setup Page" title="Bitbucket Repository Setup Page" /></p>
 
 <p>If you click “I have an existing project”, as I have in the screenshot above, it kindly tells you what to type in your terminal to push your repository up to Bitbucket. Since I’m already in the directory of my project, I’ll skip <code>cd /path/to/my/repo</code>, and since I haven’t defined any version tags (like 2.1.4–I won’t cover git tags here), I can skip <code>git push -u origin --tags</code>. All I have to type is</p>
 
@@ -254,7 +333,7 @@
 
 <p>As you can see, Git asked me for my Bitbucket password, then spat out a bunch of stuff basically saying it successfully pushed our project up to Bitbucket. Now, if you refresh your Bitbucket page, it should look like this:</p>
 
-<p><img src="http://benlindsay.github.io/images/bitbucket_repo_after_first_push.png" alt="Bitbucket Repository Page After First Push" title="Bitbucket Repository Page After First Push" /></p>
+<p><img src="/images/bitbucket_repo_after_first_push.png" alt="Bitbucket Repository Page After First Push" title="Bitbucket Repository Page After First Push" /></p>
 
 <p>You’ll notice that the contents of <code>README.md</code> (“This is an awesome project.”) have been displayed on the Overview page. Both Bitbucket and GitHub look for <code>README.md</code> in the main directory of your project and display its contents on the main repository page. For info on the user-friendly markdown syntax Bitbucket looks for in <code>README.md</code> files, see this <a href="https://bitbucket.org/tutorials/markdowndemo/overview">tutorial</a>.</p>
 
@@ -384,221 +463,159 @@
 <p>I’ll discuss branching and checking out previous commits another time. These are really cool concepts that further add to what you can do with your code. For now, here’s a <a href="http://rogerdudler.github.io/git-guide/">great simple reference</a> by Roger Dudler, which, as he says, contains “no deep shit”. I look back at this all the time.</p>
 
 <p>Good luck! Feel free to leave comments and questions below.</p>
-]]></content>
-  </entry>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
   
-  <entry>
-    <title type="html"><![CDATA[Getting More Out of Vim]]></title>
-    <link href="http://benlindsay.github.io/blog/2015/12/getting-more-out-of-vim/"/>
-    <updated>2015-12-24T08:53:11-05:00</updated>
-    <id>http://benlindsay.github.io/blog/2015/12/getting-more-out-of-vim</id>
-    <content type="html"><![CDATA[<p>For those of you who don’t know, Vim is a powerful command-line text editor. It is the improved version of it’s predecessor, Vi (in fact, it stands for Vi IMproved). I’m a big fan of Vim for coding and text editing. I started using it a few years ago only because it was the only way I knew how to edit files when SSH-ing onto a remote Linux machine. Now that I’ve spent time learning how to use it right, I find it faster than any GUI text editor I’ve used before. There is a somewhat steep learning curve, but if you do a lot of coding or plain-text editing, it’s definitely worth investing some time to learn how to use Vim right. Hopefully this post can provide some direction if you are intimidated by Vim like I was when I first started.</p>
 
-<!--more-->
+<span class="byline author vcard">Posted by <span class="fn">Ben Lindsay</span></span>
 
-<p>If you’re just starting Vim and need some basic directions, I’d look at <a href="http://computers.tutsplus.com/tutorials/vim-for-beginners--cms-21118">this tutorial</a>. A good reference to look back at after going through this tutorial can be found <a href="https://simpletutorials.com/c/1238/Simple+Vim+Reference">here</a>. Even these introductory materials have a <em>lot</em> of commands though, so I’ll summarize the steps I’d recommend taking to getting more out of Vim.</p>
+      
 
-<h2 id="install-vim-pathogen">1. Install Vim-Pathogen</h2>
 
-<p>Before anything else, I want to put in a plug for <a href="https://github.com/tpope/vim-pathogen">Vim-Pathogen</a>. To get the most out of Vim, you might want to add a some plugins for things like file system navigation (<a href="https://github.com/scrooloose/nerdtree">NERD Tree</a>), auto-closing parentheses and brackets (<a href="https://github.com/Townk/vim-autoclose">Vim-Autoclose</a>), and writing and compiling LaTeX files (<a href="https://github.com/LaTeX-Box-Team/LaTeX-Box">LaTeX-Box</a>). Once you install <a href="https://github.com/tpope">Tim Pope</a>’s <a href="https://github.com/tpope/vim-pathogen">Vim-Pathogen</a> script, installing any new plugins is super easy.</p>
 
-<p>Setting up Vim-Pathogen itself is pretty easy too. Just follow the instructions on <a href="https://github.com/tpope/vim-pathogen">github.com/tpope/vim-pathogen</a>. At the end of your setup, you will have a <code>.vim</code> folder in your home directory organized like this:</p>
 
-<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-<span class="line-number">4</span>
-<span class="line-number">5</span>
-</pre></td><td class="code"><pre><code class=""><span class="line">$ tree ~/.vim
-</span><span class="line">.
-</span><span class="line">├── autoload
-</span><span class="line">│   └── pathogen.vim
-</span><span class="line">└── bundle</span></code></pre></td></tr></table></div></figure></notextile></div>
+<time class='entry-date' datetime='2016-01-05T21:36:17-05:00'><span class='date'><span class='date-month'>Jan</span> <span class='date-day'>5</span><span class='date-suffix'>th</span>, <span class='date-year'>2016</span></span> <span class='time'>9:36 pm</span></time>
+      
 
-<p>From there, all you ever need to do to install a plugin is find the plugin repository on GitHub and <code>git clone</code> it in your <code>~/.vim/bundle</code> folder. For example, to install the NERD Tree plugin, you would:</p>
-
-<ol>
-  <li>Google something like “vim nerd tree”</li>
-  <li>Find the link to a GitHub repo (<a href="https://github.com/scrooloose/nerdtree">https://github.com/scrooloose/nerdtree</a>)</li>
-  <li><code>cd ~/.vim/bundle</code></li>
-  <li><code>git clone https://github.com/scrooloose/nerdtree</code></li>
-  <li>Open Vim and type <code>:Helptags</code> to update the help menu in Vim.</li>
-</ol>
-
-<p>And just like that you’re all set up with your new plugin. If you ever want to remove or temporarily disable a plugin, just delete the cloned repo (<code>rm -rf ~/.vim/bundle/nerdtree</code>) or move it somewhere else (<code>mv ~/.vim/bundle/nerdtree /any/other/path</code>).</p>
-
-<h2 id="practice-navigation">2. Practice Navigation</h2>
-
-<p>The ability to navigate around Vim without having to leave the keyboard home row is in my opinion its biggest time-saving feature, but it takes a bit of practice to get the hang of it. The resources I listed above are great references to look back on if you forget some commands.</p>
-
-<p>The best thing to start practicing is maneuvering with the <code>hjkl</code> keys instead of the arrow keys. It’s strange at first, but it becomes second nature soon enough. To make best use of this navigation technique, keep in mind that you want to be in <strong>Normal</strong> mode instead of <strong>Insert</strong> mode any time you aren’t adding text to your file. Get in the habit of hitting <code>ESC</code> or the equivalent <code>CTRL-C</code> (I prefer <code>CTRL-C</code>) any time you take a break from typing so you don’t start adding a bunch of h’s, j’s, k’s , and l’s to your file. Here’s a silly <a href="http://vim-adventures.com">game</a> you can play if you want to have fun while practicing Vim navigation.</p>
-
-<p>Here’s a short list of the other navigation techniques (all used in <strong>Normal</strong> mode) I use most frequently:</p>
-
-<ol>
-  <li>Typing a number before <code>h</code>, <code>j</code>, <code>k</code>, or <code>l</code> navigates in that direction that number of times. For example, <code>10j</code> moves down 10 lines.</li>
-  <li><code>28G</code> moves to line 28. Have <code>:set nu</code> typed somewhere in your <code>~/.vimrc</code> file so the line numbers show up when you’re in Vim.</li>
-  <li><code>gg</code> or <code>G</code> move to the top or bottom of the file, respectively.</li>
-  <li><code>/foo</code> moves to the next place “foo” is found in the document (case sensitive). Typing <code>n</code> then moves to the next one and typing <code>N</code> moves to the previous one.</li>
-  <li><code>0</code> and <code>$</code> move to the beggining and end of the line, respectively.</li>
-  <li><code>W</code> and <code>B</code> take you to the beginning of the next WORD and previous WORD, respectivley. In Vim, WORDS are chunks of text separated by white space and words are more like normal words. For example, in a line that looks like <code>words-making/up.a!big~WORD WORD-2</code>, typing <code>W</code> would take you to the beginning of <code>WORD-2</code>, whereas typing <code>w</code> or <code>b</code>, which navigate between vim words (instead of WORDS), would hit all the <code>-/.!~</code> characters in addition to the beginnings of english words.</li>
-  <li><code>fh</code> moves to the next occurrence of the character “h” within the line. <code>th</code> does the same thing but places the cursor just before the “h” instead of right on it.</li>
-  <li><code>{</code> and <code>}</code> take you to the previous and next paragraph, respectively. <code>(</code> and <code>)</code> do the same with sentences. This is really nice when typing a lot of text as opposed to code. You can still use them with code, but they’re just not as predictable.</li>
-</ol>
-
-<h2 id="learn-to-speak-vim">3. Learn to Speak Vim</h2>
-
-<p>What I mean by this is that Vim has a unique command syntax that makes it easy to supercharge your commands. Yan Pritzker has a great post about this <a href="http://yanpritzker.com/2011/12/16/learn-to-speak-vim-verbs-nouns-and-modifiers/">here</a>.</p>
-
-<p>In addition to the <code>&lt;verb&gt;&lt;modifier&gt;&lt;text object&gt;</code> syntax explained in the article, there is also a useful <code>&lt;verb&gt;&lt;navigation command&gt;</code> syntax that I frequently use. A typical example is something like <code>d3j</code>. Here, <code>d</code> is the verb for delete, and <code>3j</code> tells Vim how far to go, in this case, down 3 lines. So <code>d3j</code> deletes the current line and the following 3 lines. You can use any of the navigation commands mentioned above in place of <code>3j</code> and any verb in place of <code>d</code>. Common verbs are <code>c</code> for change (delete specified region and enter insert mode) and <code>y</code> for yank (Vim’s word for copy, where p or P can be used to paste what you copy).</p>
-
-<p>No go out and practice this stuff, and hopefully you’ll see why so many people swear by Vim. If you have thoughts, comments, corrections, or additions you’d like to see, let me know!</p>
-]]></content>
-  </entry>
+<span class="categories">
   
-  <entry>
-    <title type="html"><![CDATA[Parameter Sweep Bash Script]]></title>
-    <link href="http://benlindsay.github.io/blog/2015/12/parameter-sweep-bash-script/"/>
-    <updated>2015-12-19T11:09:40-05:00</updated>
-    <id>http://benlindsay.github.io/blog/2015/12/parameter-sweep-bash-script</id>
-    <content type="html"><![CDATA[<p>In my polymer field theory research, often my studies involve running a bunch of simulations where I pick one or more input parameters and change them over a range of values, then compare the results of each separate simulation to see how that/those variable(s) affect the system I’m simulating. This kind of study is called a “parameter sweep”, and can also be referred to as “embarrassingly parallel”, because the processor(s) for each for each individual job don’t need to communicate with the processor(s) from any other job. It can be very tedious to manually create input files for each job, so I wrote a bash script to help me out.</p>
-
-<!--more-->
-
-<p>For example, if I want to simulate 3 different polymer nanocomposite systems, each with a different nanorod length, I could manually create 3 directories like so:</p>
-
-<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-</pre></td><td class="code"><pre><code class=""><span class="line">mkdir length1
-</span><span class="line">mkdir length2
-</span><span class="line">mkdir length3</span></code></pre></td></tr></table></div></figure></notextile></div>
-
-<p>Then I could copy an input file, <code>bcp.input</code>, and a submit file, <code>sub.sh</code> into each of those folders like so:</p>
-
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-<span class="line-number">4</span>
-</pre></td><td class="code"><pre><code class="bash"><span class="line"><span class="k">for</span> d in length*/ <span class="p">;</span> <span class="k">do</span>
-</span><span class="line">  cp bcp.input <span class="s2">&quot;$d&quot;</span>
-</span><span class="line">  cp sub.sh <span class="s2">&quot;$d&quot;</span>
-</span><span class="line"><span class="k">done</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div>
-
-<p>Then I could proceed to manually edit all 6 files (or just 3 if the submission script doesn’t have to change). If it’s just 3 files, it’s not too bad, but if I want to run 10 or 20 simulations with slight changes in the input file for each one, manual editing gets real tedious real fast. I got fed up with it and wrote a script to do all the editing for me. The script is called <code>param-sweep.sh</code>. Feel free to look at it on <a href="https://github.com/benlindsay/param-sweep.git">GitHub</a>.</p>
-
-<p>Before running the script, I make a template for the input file and submission script with parameter names that the script will replace with parameter values. My input file template could look something like this:</p>
-
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-<span class="line-number">4</span>
-</pre></td><td class="code"><pre><code class="bash"><span class="line"><span class="m">1000</span>        <span class="c"># Number of iterations</span>
-</span><span class="line"><span class="m">60</span>          <span class="c"># Polymer length</span>
-</span><span class="line"><span class="m">1</span>           <span class="c"># Nanorod radius</span>
-</span><span class="line">NRLENGTH    <span class="c"># Nanorod length</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div>
-
-<p>and my submission script template could look something like this:</p>
-
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-<span class="line-number">4</span>
-<span class="line-number">5</span>
-<span class="line-number">6</span>
-<span class="line-number">7</span>
-<span class="line-number">8</span>
-<span class="line-number">9</span>
-</pre></td><td class="code"><pre><code class="bash"><span class="line"><span class="c">#!/bin/sh</span>
-</span><span class="line"><span class="c">#PBS -N TRIALNAME</span>
-</span><span class="line"><span class="c">#PBS -l nodes=1:ppn=12</span>
-</span><span class="line"><span class="c">#PBS -l walltime=01:00:00,mem=2gb</span>
-</span><span class="line">
-</span><span class="line"><span class="nb">cd</span> <span class="nv">$PBS_O_WORKDIR</span>
-</span><span class="line">
-</span><span class="line"><span class="c"># Run code that looks for bcp.input in the current directory</span>
-</span><span class="line">mpirun <span class="nv">$HOME</span>/code/awesome_code.exe
-</span></code></pre></td></tr></table></div></figure></notextile></div>
-
-<p>In this example, I want to replace <code>NRLENGTH</code> with the actual nanorod length for each <code>bcp.input</code> file in <code>./length1</code>, <code>./length2</code>, and <code>./length3</code>, and I want to replace <code>TRIALNAME</code> with a name corresponding to each simulation in each <code>sub.sh</code> file. The script does this by looking through a <code>trials.txt</code> file I make that would look like this in this case:</p>
-
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-<span class="line-number">4</span>
-</pre></td><td class="code"><pre><code class=""><span class="line">name        i:NRLENGTH  s:TRIALNAME
-</span><span class="line">length1     4           length1-trial
-</span><span class="line">length2     5           length2-trial
-</span><span class="line">length3     6           length3-trial</span></code></pre></td></tr></table></div></figure></notextile></div>
-
-<p>The <code>i:</code> and <code>s:</code> before <code>NRLENGTH</code> and <code>TRIALNAME</code>, respectively, tell the script to look in the input file or submission script for each variable. Finally, let’s look at how to use the script:</p>
-
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-<span class="line-number">4</span>
-<span class="line-number">5</span>
-<span class="line-number">6</span>
-<span class="line-number">7</span>
-<span class="line-number">8</span>
-<span class="line-number">9</span>
-<span class="line-number">10</span>
-<span class="line-number">11</span>
-<span class="line-number">12</span>
-<span class="line-number">13</span>
-<span class="line-number">14</span>
-<span class="line-number">15</span>
-<span class="line-number">16</span>
-<span class="line-number">17</span>
-<span class="line-number">18</span>
-<span class="line-number">19</span>
-<span class="line-number">20</span>
-<span class="line-number">21</span>
-<span class="line-number">22</span>
-<span class="line-number">23</span>
-<span class="line-number">24</span>
-<span class="line-number">25</span>
-<span class="line-number">26</span>
-<span class="line-number">27</span>
-<span class="line-number">28</span>
-</pre></td><td class="code"><pre><code class=""><span class="line">$ ls
-</span><span class="line">bcp.input   trials.txt  sub.sh
-</span><span class="line">$ ~/scripts/param-sweep.sh -t trials.txt -i bcp.input -s sub.sh
-</span><span class="line">Trials file:        trials.txt 
-</span><span class="line">Input file:         bcp.input
-</span><span class="line">Submission script:  sub.sh
-</span><span class="line">3 trials
-</span><span class="line">2 vars
-</span><span class="line">Submitting trial length1:
-</span><span class="line">1443364.rrlogin.internal
-</span><span class="line">Submitting trial length2:
-</span><span class="line">1443365.rrlogin.internal
-</span><span class="line">Submitting trial length3:
-</span><span class="line">1443366.rrlogin.internal
-</span><span class="line">$ tree
-</span><span class="line">.
-</span><span class="line">├── bcp.input
-</span><span class="line">├── length1
-</span><span class="line">│   ├── bcp.input
-</span><span class="line">│   └── sub.sh
-</span><span class="line">├── length2
-</span><span class="line">│   ├── bcp.input
-</span><span class="line">│   └── sub.sh
-</span><span class="line">├── length3
-</span><span class="line">│   ├── bcp.input
-</span><span class="line">│   └── sub.sh
-</span><span class="line">├── sub.sh
-</span><span class="line">└── trials.txt</span></code></pre></td></tr></table></div></figure></notextile></div>
-
-<p>So the script made directories for all three simulations, replaced <code>NRLENGTH</code> with <code>4</code>, <code>5</code>, and <code>6</code> in the <code>bcp.input</code> files, replaced <code>TRIALNAME</code> with <code>length1-trial</code>, <code>length2-trial</code>, and <code>length3-trial</code> in the <code>sub.sh</code> files, and submitted the <code>sub.sh</code> files from within their respective simulation directories. In this case, since my script expects files with the names I used, I could have just typed <code>~/scripts/param-sweep.sh</code>. If I wanted to be able to check the files before submitting, I could have typed <code>~/scripts/param-sweep.sh -n</code> which would create the directories and files without submitting the jobs.</p>
-
-<p>A few caveats: the script isn’t currently set up to handle more than one layer of simulation directories. Also, the script as it’s set up right now copies whatever input file and submission script its fed to files named <code>bcp.input</code> and <code>sub.sh</code>. Finally, you’ll need to make sure that the variable name you want the script to find and replace with variable values doesn’t show up anywhere else in the file. The script will find and replace all instances of the variable name (case sensitive).</p>
-
-<p>This script has saved me a lot of time. Hopefully it can help someone else out there too.</p>
-
-]]></content>
-  </entry>
+    <a class='category' href='/blog/categories/git/'>git</a>, <a class='category' href='/blog/categories/productivity/'>productivity</a>
   
-</feed>
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://benlindsay.github.io/blog/2016/01/life-is-better-with-git/" data-via="" data-counturl="http://benlindsay.github.io/blog/2016/01/life-is-better-with-git/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2015/12/getting-more-out-of-vim/" title="Previous Post: Getting More Out of Vim">&laquo; Getting More Out of Vim</a>
+      
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section id="aside-icons">
+  <span class="fa-stack fa-lg">
+    <a href="mailto:benjlindsay@gmail.com">
+      <i class="fa fa-envelope-square fa-stack-2x"></i>
+    </a>
+  </span>
+  <span class="fa-stack fa-lg">
+    <a href="https://www.linkedin.com/in/benjamin-lindsay-b1012028">
+      <i class="fa fa-linkedin-square fa-stack-2x"></i>
+    </a>
+  </span>
+  <span class="fa-stack fa-lg">
+    <a href="https://github.com/benlindsay">
+      <i class="fa fa-github-square fa-stack-2x"></i>
+    </a>
+  </span>
+  <span class="fa-stack fa-lg">
+    <a href="https://bitbucket.org/benlindsay">
+      <i class="fa fa-bitbucket-square fa-stack-2x"></i>
+    </a>
+  </span>
+</section>
+<section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2016/01/life-is-better-with-git/">Life Is Better With Git</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/12/getting-more-out-of-vim/">Getting More Out of Vim</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/12/parameter-sweep-bash-script/">Parameter Sweep Bash Script</a>
+      </li>
+    
+  </ul>
+</section>
+<section class="category-list">
+  <h1>Categories</h1>
+    <ul id="category-list"><li><a href='/blog/categories/bash'>bash (1)</a></li><li><a href='/blog/categories/git'>git (1)</a></li><li><a href='/blog/categories/productivity'>productivity (3)</a></li><li><a href='/blog/categories/vim'>vim (1)</a></li></ul>
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2016 - Ben Lindsay -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'benlindsay';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://benlindsay.github.io/blog/2016/01/life-is-better-with-git/';
+        var disqus_url = 'http://benlindsay.github.io/blog/2016/01/life-is-better-with-git/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>
