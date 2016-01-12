@@ -4,7 +4,7 @@
   <title><![CDATA[Ben Lindsay]]></title>
   <link href="http://benlindsay.github.io/atom.xml" rel="self"/>
   <link href="http://benlindsay.github.io/"/>
-  <updated>2016-01-11T14:54:17-05:00</updated>
+  <updated>2016-01-11T21:40:30-05:00</updated>
   <id>http://benlindsay.github.io/</id>
   <author>
     <name><![CDATA[Ben Lindsay]]></name>
@@ -22,7 +22,9 @@
 
 <!--more-->
 
-<p>There’s a lot you can learn about Git, but you don’t have to know that much to start speeding up and cleaning up your workflow. The following list of commands covers most of what you’ll need to use Git. For almost everything else, a quick Google search turns up a StackOverflow can get a lot of the benefits of Git with just this short list of commands:</p>
+<p>There’s a lot you can learn about Git, but you don’t have to know that much to start speeding up and cleaning up your workflow. The list of commands below covers most of what you’ll need to get started. The rest of this post shows you how to use them. Roger Dudler’s <a href="http://rogerdudler.github.io/git-guide/">simple guide to Git</a> is a great resource to look back at after you get started. Almost any other question you could ask about Git has already been asked and answered on <a href="http://stackoverflow.com/">StackOverflow</a>, so Google is your friend.</p>
+
+<p>Here are what I consider the most important commands when starting out with Git:</p>
 
 <ul>
   <li><strong>Just once to set your user name and email for your whole system:</strong>
@@ -38,19 +40,24 @@
       <li><code>git push -u origin --all</code></li>
     </ul>
   </li>
-  <li><strong>Once every time you want to save the code’s current state:</strong>
+  <li><strong>Save the code’s current state:</strong>
     <ul>
       <li><code>git add .</code></li>
       <li><code>git commit -m "commit message"</code></li>
       <li><code>git push origin master</code></li>
     </ul>
   </li>
-  <li><strong>Any time to look at current commit status:</strong>
+  <li><strong>Pull changes from the remote repository to your local one:</strong>
+    <ul>
+      <li><code>git pull</code></li>
+    </ul>
+  </li>
+  <li><strong>Look at current commit status:</strong>
     <ul>
       <li><code>git status</code></li>
     </ul>
   </li>
-  <li><strong>Any time to look at commit history:</strong>
+  <li><strong>Look at commit history:</strong>
     <ul>
       <li><code>git log</code></li>
     </ul>
@@ -71,19 +78,27 @@
 
 <h2 id="how-do-i-start-using-git">How Do I Start Using Git?</h2>
 
-<p>OK, so you’re convinced. Here’s how to start experiencing the awesomeness that is Git:</p>
+<p>OK, so you’re convinced. Here’s how to start:</p>
 
-<h3 id="make-sure-git-is-installed">1. Make Sure Git is Installed</h3>
+<h3 id="see-if-git-is-installed">1. See if Git is Installed</h3>
 
-<p>Open a terminal window and type <code>which git</code>. (If you’re on a Windows system, you’ll need to have Cygwin or something to give you a Unix-like terminal, otherwise I can’t guarantee that any of this will work for you.) Typing <code>which git</code> will return <code>/usr/local/bin/git</code> or some other path if it’s installed. If it returns nothing, you need to download it.</p>
+<p>Open a terminal window and type <code>which git</code>. (If you’re on a Windows system, you’ll need to have Cygwin or something to give you a Unix-like terminal, otherwise I can’t guarantee that any of this will work for you.) Typing <code>which git</code> will return <code>/usr/local/bin/git</code> or some other path if it’s installed. If it does, you’re golden. If it returns nothing, you need to download it.</p>
 
-<p>To download Git, if you’re on a Mac, installing Xcode or just the Xcode command-line tools (type <code>xcode-select --install</code> in command line) will do it. However, I’d recommend installing using Homebrew (<code>brew doctor; brew update; brew install git</code>). If you don’t have Homebrew installed (i.e. <code>which brew</code> returns nothing) then go install it. It’s awesome for really easily installing and updating command-line tools. To install it, go to the <a href="http://brew.sh/">Homebrew website</a>, copy the install line, paste it into a terminal, press enter, and you’re set. If you have Git installed by both Xcode and Homebrew, make sure <code>/usr/local/bin</code> comes before <code>/usr/bin</code> in your path (i.e. have <code>export PATH="/usr/local/bin:$PATH"</code> in your <code>~/.bash_profile</code> file) so the Homebrew version is used. Sorry, little bit of a tangent there.</p>
+<h3 id="install-git-if-necessary">2. Install Git (if necessary)</h3>
+
+<p><strong>Mac:</strong></p>
+
+<p>If you’re on a Mac, installing Xcode or just the Xcode command-line tools (type <code>xcode-select --install</code> in command line) will do it. However, I’d recommend installing using Homebrew (<code>brew doctor; brew update; brew install git</code>). If you don’t have Homebrew installed (i.e. <code>which brew</code> returns nothing) then go install it. It’s awesome for really easily installing and updating command-line tools. To install it, go to the <a href="http://brew.sh/">Homebrew website</a>, copy the install line, paste it into a terminal, press enter, and you’re set. If you have Git installed by both Xcode and Homebrew, make sure <code>/usr/local/bin</code> comes before <code>/usr/bin</code> in your path (i.e. have <code>export PATH="/usr/local/bin:$PATH"</code> in your <code>~/.bash_profile</code> file) so the Homebrew version is used. Sorry, little bit of a tangent there.</p>
+
+<p><strong>Linux:</strong></p>
 
 <p>If you’re on a Linux system, use <code>apt-get install git</code>, or replace <code>apt-get</code> with whatever package manager you use (go <a href="https://git-scm.com/download/linux">here</a> for more specifics). If you don’t have root access, instructions can be found <a href="http://joemaller.com/908/how-to-install-git-on-a-shared-host/">here</a> to install locally.</p>
 
+<p><strong>Windows:</strong></p>
+
 <p>If you’re on Windows, go <a href="https://git-scm.com/download/win">here</a> and do your thing.</p>
 
-<h3 id="configure-name-and-email">2. Configure Name and Email</h3>
+<h3 id="configure-name-and-email">3. Configure Name and Email</h3>
 
 <p>Git attaches your name and email to every commit you make. You just need to configure them once on your computer, and Git will get it right on all of your projects after that. You can change them at any time later on. Type these commands to configure Git:</p>
 
@@ -94,7 +109,7 @@
 
 <p>If you’re not sure if Git already knows your name and email, just type <code>git config --global user.name</code> and <code>git config --global user.email</code> and Git will tell you what it thinks they are.</p>
 
-<h3 id="initialize-a-git-repository">3. Initialize a Git Repository</h3>
+<h3 id="initialize-a-git-repository">4. Initialize a Git Repository</h3>
 
 <p>First, let’s create an awesome project:</p>
 
@@ -107,7 +122,7 @@
 </pre></td><td class="code"><pre><code class=""><span class="line">$ mkdir awesome-project
 </span><span class="line">$ cd awesome-project
 </span><span class="line">$ echo "This is an awesome project." &gt; README.md
-</span><span class="line">$ echo "print 'Hello, World'" &gt; hello.py
+</span><span class="line">$ echo "print 'Hello, World!'" &gt; hello.py
 </span><span class="line">$ ls -a
 </span><span class="line">.         ..        README.md hello.py</span></code></pre></td></tr></table></div></figure></notextile></div>
 
@@ -151,9 +166,9 @@
 
 <p>So Git sees that there are files present that haven’t been committed. Next, you need to…</p>
 
-<h3 id="make-your-first-commit">3. Make Your First Commit</h3>
+<h3 id="make-your-first-commit">5. Make Your First Commit</h3>
 
-<p>Git uses a 2-step commit process. First, you use <code>git add</code> to tell Git what files you want to include in the commit. In Git-speak, this is called <strong>staging</strong> files, or adding files to the <strong>index</strong>. Usually I will just add all files in the project using</p>
+<p>Git uses a 2-step commit process. First, you use <code>git add</code> to tell Git what files you want to include in the commit. In Git-speak, this is called <strong>staging</strong> files, or adding files to the <strong>index</strong>. Often, I will just add all files in the project using</p>
 
 <div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
 </pre></td><td class="code"><pre><code class=""><span class="line">$ git add .</span></code></pre></td></tr></table></div></figure></notextile></div>
@@ -199,13 +214,13 @@
 
 <p>Your typical workflow will just be to type <code>git add .</code> then <code>git commit -m "commit message"</code> whenever you’ve made changes to your project that you want to save.</p>
 
-<h3 id="backup-your-code-on-githubhttpsgithubcom-or-bitbuckethttpsbitbucketorg">4. Backup Your Code on <a href="https://github.com">GitHub</a> or <a href="https://bitbucket.org">Bitbucket</a></h3>
+<h3 id="backup-your-code-on-githubhttpsgithubcom-or-bitbuckethttpsbitbucketorg">6. Backup Your Code on <a href="https://github.com">GitHub</a> or <a href="https://bitbucket.org">Bitbucket</a></h3>
 
 <p>Git makes it very easy to keep your project backed up on external servers. This could be any server you have SSH access to, but you should use GitHub or Bitbucket since they have really nice user interfaces to view, track, and (if desired) share and collaborate on your code.</p>
 
-<p>GitHub and Bitbucket both have nice interfaces with pretty much the same functionalities. The only major differences that I see are that 1) GitHub is like a social network for coders, and it’s the go-to place to share open-source projects, and 2) Bitbucket allows unlimited private repositories for small teams (up to 5 people) while GitHub only allows publicly shared repositories (unless you pay them money). I’ll talk about setting up Bitbucket from here on out, because the private repo functionality is nice if you’re not ready to share your project with the world. Everything is almost exactly the same for using GitHub, except you’d use <code>github.com</code> anywhere you see <code>bitbucket.org</code>.</p>
+<p>GitHub and Bitbucket both have nice interfaces with pretty much the same functionalities. The only major differences that I see are that 1) GitHub is like a social network for coders, and it’s the go-to place to share open-source projects, and 2) Bitbucket allows unlimited private repositories for small teams (up to 5 people unless you have an academic account) while GitHub only allows publicly shared repositories (unless you pay them money). I’ll talk about setting up Bitbucket from here on out, because the private repo functionality is nice if you’re not ready to share your project with the world. Everything is almost exactly the same for using GitHub, except you’d use <code>github.com</code> anywhere you see <code>bitbucket.org</code>.</p>
 
-<p>First, you need to set up an account on Bitbucket. It’s super easy and free. You just need to enter your name, username, password, email address, and plan (choose “Personal Account”). Confirm the email they send you and you’re set.</p>
+<p>First, you need to set up an account on Bitbucket. It’s super easy and free. You just need to enter your name, username, password, email address, and plan (choose “Personal Account”). If you have a <code>.edu</code> email, use that. It gets you an academic account which means unlimited team sizes on private repositories for free. Confirm the email they send you and you’re set.</p>
 
 <p>Next, sign in to Bitbucket, select “Create” in the menu bar, then click on “Create repository” in the drop-down menu.</p>
 
@@ -226,7 +241,7 @@
 </pre></td><td class="code"><pre><code class=""><span class="line">$ git remote add origin https://benlindsay@bitbucket.org/benlindsay/cool-project.git
 </span><span class="line">$ git push -u origin --all</span></code></pre></td></tr></table></div></figure></notextile></div>
 
-<p>As you can see, Git asked me for my Bitbucket password, then spat out a bunch of stuff basically saying it successfully pushed our project up to Bitbucket. Now, if you refresh your Bitbucket page, it should look like this:</p>
+<p>Git will ask you for your Bitbucket password after the push command, then it will spit out a bunch of stuff basically saying it successfully pushed your project up to Bitbucket. Now, if you refresh your Bitbucket page, it should look like this:</p>
 
 <p><img src="http://benlindsay.github.io/images/bitbucket_repo_after_first_push.png" alt="Bitbucket Repository Page After First Push" title="Bitbucket Repository Page After First Push" /></p>
 
@@ -234,7 +249,7 @@
 
 <p>From this page, you can click on the “Source” link in the sidebar to explore the source files in their current state, or the “Commits” link in the sidebar to see the changes made in any commit.</p>
 
-<h3 id="syncing-project-with-another-machine">5. Syncing Project With Another Machine</h3>
+<h3 id="syncing-project-with-another-machine">7. Syncing Project With Another Machine</h3>
 
 <p>So now I have my awesome project on my laptop, and a full backup of my project on Bitbucket. From this setup, it’s incredibly easy to create copies of this project anywhere you want and keep each copy of the project up-to-date. This has been incredibly useful for me, since I typically code on one machine, and run production simulations on another.</p>
 
@@ -301,13 +316,13 @@
 </span><span class="line">
 </span><span class="line">**Author:** Ben Lindsay</span></code></pre></td></tr></table></div></figure></notextile></div>
 
-<h3 id="save-commit-hash-for-reproducible-research">6. Save Commit Hash for Reproducible Research</h3>
+<h3 id="save-commit-hash-for-reproducible-research">8. Save Commit Hash for Reproducible Research</h3>
 
 <p>Each commit you make has a unique 40-character <strong>SHA-1 hash</strong>. If you type <code>git log</code> you’ll see a list of commits you’ve made along with a long string of numbers and letters. That is the hash. Usually the first 7 or 8 characters will be all you need.</p>
 
 <p>What’s great about this is that as long as you know the first several characters of the hash associated with the state of your source code at any given time, you can get your code back exactly the way it was at that time. This means that if you use your code to generate some results and you save the beginning of that string of characters somewhere along with those results, you’ll never have to wonder what the code looked like then. Adding this step to your workflow can save a lot of pain down the road if you’re trying to replicate past results using code you’ve been actively developing.</p>
 
-<h3 id="branches-and-checkouts">7. Branches and Checkouts</h3>
+<h3 id="branches-and-checkouts">9. Branches and Checkouts</h3>
 
 <p>I’ll add stuff branching and checking out previous commits later. These are really cool concepts that further add to what you can do with your code. For now, here’s a <a href="http://rogerdudler.github.io/git-guide/">great simple reference</a> by Roger Dudler, which, as he says, contains “no deep shit”. I look back at this all the time.</p>
 
