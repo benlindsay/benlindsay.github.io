@@ -21,11 +21,11 @@ MathJax.Hub.Config({
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Category: Vim - Ben Lindsay</title>
+  <title>Baby Names Through Time: An Interactive D3 Visualization Tool - Ben Lindsay</title>
   <meta name="author" content="Ben Lindsay">
 
   
-  <meta name="description" content="Category: vim">
+  <meta name="description" content="Baby Names Through Time: An Interactive D3 Visualization Tool Choose a name: Year: 1910 Using and Understanding this Map To use the map above, &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -34,7 +34,7 @@ MathJax.Hub.Config({
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://benlindsay.github.io/blog/categories/vim/">
+  <link rel="canonical" href="http://benlindsay.github.io/projects/baby-name-map/">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="" rel="alternate" title="Ben Lindsay" type="application/atom+xml">
@@ -81,31 +81,54 @@ MathJax.Hub.Config({
 <article role="article">
   
   <header>
-    <h1 class="entry-title">Category: Vim</h1>
+    <h1 class="entry-title">Baby Names Through Time: An Interactive D3 Visualization Tool</h1>
     
   </header>
   
-  <div id="blog-archives" class="category">
+  <link href="/projects/baby-name-map/baby-name-map.css" rel="stylesheet" type="text/css" />
 
+<script src="/javascripts/libs/d3.v3.min.js"></script>
 
+<script src="/javascripts/libs/queue.v1.min.js"></script>
+
+<script src="/javascripts/libs/topojson.v1.min.js"></script>
+
+<script src="/javascripts/libs/jquery.min.js"></script>
+
+<div id="mapNameContainer" style="display: table; margin: 0 auto;">
+  Choose a name:
+  <select id="dropdown" name="Options:" onchange="changeName(this.value)">
+  </select>
+</div>
+<div id="mapContainer"></div>
+<div id="yearContainer" style="display: table; margin: 0 auto;">
+  <div id="yearTextContainer" style="display: table; margin: 0 auto;">
+    <p id="yearText">Year: 1910</p>
+  </div>
+  <input id="yearSlider" type="range" min="1910" max="2014" step="1" value="1910" oninput="changeYear(this.value)" onchange="changeYear(this.value)" onload="changeYear(this.value)" />
+</div>
+<script src="/projects/baby-name-map/baby-name-map.js"></script>
+
+<h2 id="using-and-understanding-this-map">Using and Understanding this Map</h2>
+
+<p>To use the map above, select a name from the dropdown list (you should be able to type a name if you don’t want to scroll), then drag the slider to move in time between the years 1910 and 2014. The color hue (pink vs. blue) in each state tells you whether the name was more popular for baby girls or boys. The color tone (dark pink vs. light pink) corresponds to the name’s popularity among babies of that gender. “Popularity” is measured by the percentage of babies of either gender given that name.</p>
+
+<p>For ideas on where to start, try out some of the more popular gender neutral names described in a <a href="http://fivethirtyeight.com/features/there-are-922-unisex-names-in-america-is-yours-one-of-them/">FiveThirtyEight article</a> such as Casey, Riley, Jessie, or Jackie. Or look at Jaime (also in that list) and see the popularity skyrocket in 1976, which turns out to be when <a href="http://www.imdb.com/title/tt0073965/">The Bionic Woman</a> aired on TV, portraying the adventures of a female cyborg spy named Jaime Sommers.</p>
 
   
-  <h2>2015</h2>
-
-<article>
+    <footer>
+      
+      
+        <div class="sharing">
   
-<h1><a href="/blog/2015/12/getting-more-out-of-vim/">Getting More Out of Vim</a></h1>
-<time datetime="2015-12-24T08:53:11-05:00" pubdate><span class='month'>Dec</span> <span class='day'>24</span> <span class='year'>2015</span></time>
-
-<footer>
-  <span class="categories">posted in <a class='category' href='/blog/categories/productivity/'>productivity</a>, <a class='category' href='/blog/categories/vim/'>vim</a></span>
-</footer>
-
-
-</article>
-
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://benlindsay.github.io/projects/baby-name-map/index.html" data-via="" data-counturl="http://benlindsay.github.io/projects/baby-name-map/index.html" >Tweet</a>
+  
+  
+  
 </div>
 
+      
+    </footer>
   
 </article>
 
@@ -175,19 +198,6 @@ MathJax.Hub.Config({
 
 </footer>
   
-
-<script type="text/javascript">
-      var disqus_shortname = 'benlindsay';
-      
-        
-        var disqus_script = 'count.js';
-      
-    (function () {
-      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
-      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-    }());
-</script>
 
 
 
