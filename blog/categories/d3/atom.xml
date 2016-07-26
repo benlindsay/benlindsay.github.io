@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: D3 | Ben Lindsay]]></title>
+  <link href="http://benlindsay.github.io/blog/categories/d3/atom.xml" rel="self"/>
+  <link href="http://benlindsay.github.io/"/>
+  <updated>2016-07-25T23:42:02-04:00</updated>
+  <id>http://benlindsay.github.io/</id>
+  <author>
+    <name><![CDATA[Ben Lindsay]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Interactive D3 Map of Baby Name Popularity]]></title>
+    <link href="http://benlindsay.github.io/blog/2016/07/interactive-d3-map-of-baby-name-popularity/"/>
+    <updated>2016-07-24T21:53:58-04:00</updated>
+    <id>http://benlindsay.github.io/blog/2016/07/interactive-d3-map-of-baby-name-popularity</id>
+    <content type="html"><![CDATA[<p>I just added <a href="/projects/baby-name-map">a project page</a> with an interactive US map that lets you track the popularity any of the top 1000 baby names as a function of location and time. I made this for 2 reasons:</p>
+
+<ol>
+  <li>My wife and I recently had a baby, so I’ve been interested in baby name trends and wanted an interactive way to visualize them.</li>
+  <li>I wanted to learn how to use D3, and Mike Bostock’s <a href="https://bl.ocks.org/mbostock/8ca036b3505121279daf">Quantile Chloropleth</a> example caught my eye.</li>
+</ol>
+
+<p>I’ll split my discussion of this little side project into 3 parts: the data prep part, the D3 part, and the playing with the map part.</p>
+
+<h2 id="the-data-prep-part">The Data Prep Part</h2>
+
+<p>I wanted the map to respond quickly to moving the slider for any given name, but I didn’t want the browser to have to load in too much data at a time, so I decided to make a separate file for each name which contained all the data relevant to that name. The raw data, which I downloaded from <a href="https://www.kaggle.com/kaggle/us-baby-names">Kaggle</a>, (<a href="https://www.kaggle.com/kaggle/us-baby-names/downloads/us-baby-names-release-2015-12-18-00-53-48.zip">data download link here</a>) needed to be processed a bit before my map could use it. An IPython Notebook using the <em>pandas</em> Python module was a great tool for this purpose. You can see my Notebook <a href="https://github.com/benlindsay/baby-name-map-preprocess/blob/master/preprocess.ipynb">here</a> on GitHub. (I’m pretty excited that GitHub now <a href="http://blog.jupyter.org/2015/05/07/rendering-notebooks-on-github/">renders the contents of IPython Notebooks</a> by the way.)</p>
+
+<p>I’ve been using Python (mostly <em>numpy</em>) for data analysis for a couple years now, but this was my first real introduction to <em>pandas</em>. I found the <a href="http://pandas.pydata.org/pandas-docs/stable/generated/pandas.DataFrame.pivot_table.html"><code>DataFrame.pivot_table()</code></a> function particularly useful in this project. It allowed me to very easily create a dataframe with states as the rows and years as the columns out of a dataframe with a different row for each name.</p>
+
+<h2 id="the-d3-part">The D3 Part</h2>
+
+<p>Creating the map using <a href="https://d3js.org/">D3</a> actually wasn’t too difficult. It was mostly a matter of following along with Mike Bostock’s <a href="https://bl.ocks.org/mbostock/4060606">choropleth example</a>. Scott Murray’s <a href="http://alignedleft.com/tutorials/d3">D3 Tutorials</a> were also incredibly useful. I highly recommend them for anyone interested in checking out D3. The Javascript code used to generate the map can be seen <a href="https://github.com/benlindsay/baby-name-map-preprocess/blob/master/choro.js">here</a>.</p>
+
+<h2 id="the-playing-with-the-map-part">The Playing With the Map Part</h2>
+
+<p>The gender neutral names make the most interesting visualizations, so I looked through <a href="http://fivethirtyeight.com/">FiveThirtyEight</a>’s list of the <a href="http://fivethirtyeight.com/features/there-are-922-unisex-names-in-america-is-yours-one-of-them/">most popular gender neutral names</a>.</p>
+
+<p>Casey, the most popular one, is interesting because of how clean the male/female split was at some points. Here’s what it looked like in 1980:</p>
+
+<p><img src="/images/Casey_1980.png" alt="Casey in 1980" title="Casey in 1980" /></p>
+
+<p>Another interesting one was Jaime. Here’s the map for Jaime in 1975:</p>
+
+<p><img src="/images/Jaime_1975.png" alt="Jaime in 1975" title="Jaime in 1975" /></p>
+
+<p>Just one year later, when <a href="http://www.imdb.com/title/tt0073965/">The Bionic Woman</a> aired on TV, everyone must have loved Jaime, the female cyborg spy because suddenly Jaime’s popularity among babies skyrocketed. Here’s the map for 1976:</p>
+
+<p><img src="/images/Jaime_1976.png" alt="Jaime in 1976" title="Jaime in 1976" /></p>
+
+<p>If you see anything interesting with other names, go ahead and post below.</p>
+]]></content>
+  </entry>
+  
+</feed>

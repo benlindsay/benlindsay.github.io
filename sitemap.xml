@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>http://benlindsay.github.io/blog/2016/07/interactive-d3-map-of-baby-name-popularity/</loc>
+    <lastmod>2016-07-24T21:53:58-04:00</lastmod>
+  </url>
+  <url>
     <loc>http://benlindsay.github.io/blog/2016/01/life-is-better-with-git/</loc>
     <lastmod>2016-01-05T21:36:17-05:00</lastmod>
   </url>
@@ -38,5 +42,17 @@
   </url>
   <url>
     <loc>http://benlindsay.github.io/blog/categories/git/</loc>
+  </url>
+  <url>
+    <loc>http://benlindsay.github.io/blog/categories/d3/</loc>
+  </url>
+  <url>
+    <loc>http://benlindsay.github.io/blog/categories/python/</loc>
+  </url>
+  <url>
+    <loc>http://benlindsay.github.io/blog/categories/pandas/</loc>
+  </url>
+  <url>
+    <loc>http://benlindsay.github.io/blog/categories/data-visualization/</loc>
   </url>
 </urlset>
