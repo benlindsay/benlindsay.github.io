@@ -4,7 +4,7 @@
   <title><![CDATA[Ben Lindsay]]></title>
   <link href="http://benlindsay.github.io/atom.xml" rel="self"/>
   <link href="http://benlindsay.github.io/"/>
-  <updated>2016-07-25T23:42:02-04:00</updated>
+  <updated>2016-07-25T23:58:22-04:00</updated>
   <id>http://benlindsay.github.io/</id>
   <author>
     <name><![CDATA[Ben Lindsay]]></name>
@@ -24,6 +24,8 @@
   <li>My wife and I recently had a baby, so I’ve been interested in baby name trends and wanted an interactive way to visualize them.</li>
   <li>I wanted to learn how to use D3, and Mike Bostock’s <a href="https://bl.ocks.org/mbostock/8ca036b3505121279daf">Quantile Chloropleth</a> example caught my eye.</li>
 </ol>
+
+<!--more-->
 
 <p>I’ll split my discussion of this little side project into 3 parts: the data prep part, the D3 part, and the playing with the map part.</p>
 
