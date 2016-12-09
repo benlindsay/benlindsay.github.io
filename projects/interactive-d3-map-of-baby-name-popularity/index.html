@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+        <title>Interactive D3 Map of Baby Name Popularity</title>
+        <meta charset="utf-8" />
+
+
+        <!-- Mobile viewport optimized: j.mp/bplateviewport -->
+        <meta name="viewport" content="width=device-width,initial-scale=1, maximum-scale=1">
+
+        <link rel="stylesheet" type="text/css" href="/theme/gumby.css" />
+        <link rel="stylesheet" type="text/css" href="/theme/style.css" />
+        <link rel="stylesheet" type="text/css" href="/theme/pygment.css" />
+
+        <script src="/theme/js/libs/modernizr-2.6.2.min.js"></script>
+
+
+
+
+</head>
+
+<body id="index" class="home">
+
+
+    <div class="container">
+
+        <div class="row">
+
+          <header id="banner" class="body">
+              <h1><a href="/">Ben Lindsay <strong></strong></a></h1>
+          </header><!-- /#banner -->
+
+            <div id="navigation" class="navbar row">
+              <a href="#" gumby-trigger="#navigation &gt; ul" class="toggle"><i class="icon-menu"></i></a>
+              <ul class="columns">
+                  <li >
+                      <a href="/">Home</a>
+                  </li>
+            <li ><a href="/blog/">Blog</a></li>
+            <li class="active"><a href="/projects/">Projects</a></li>
+
+              </ul>
+            </div>
+
+<section id="content" class="body">
+
+   <div class="row">
+        <div class="eleven columns">
+
+
+            <header>
+              <h2 class="entry-title">
+                <a href="/projects/interactive-d3-map-of-baby-name-popularity/" rel="bookmark"
+                   title="Permalink to Interactive D3 Map of Baby Name Popularity">Interactive D3 Map of Baby Name Popularity</a></h2>
+           
+            </header>
+            <footer class="post-info">
+              <abbr class="published" title="2016-07-24T00:00:00-04:00">
+                Sun 24 July 2016
+              </abbr>
+            </footer><!-- /.post-info -->
+            <div class="spacer"></div>
+            <div class="entry-content">
+              <link href="/css/baby-name-map.css" rel="stylesheet" type="text/css">
+<script src="/js/libs/d3.v3.min.js"></script>
+<script src="/js/libs/queue.v1.min.js"></script>
+<script src="/js/libs/topojson.v1.min.js"></script>
+<script src="/js/libs/jquery.min.js"></script>
+<div id="mapNameContainer" style="display: table; margin: 0 auto;">
+  Choose a name:
+  <select id="dropdown" name="Options:" onchange="changeName(this.value)">
+  </select>
+</div>
+<div id="mapContainer"></div>
+<div id="yearContainer" style="display: table; margin: 0 auto;">
+  <div id="yearTextContainer" style="display: table; margin: 0 auto;">
+    <p id="yearText">Year: 1910</p>
+  </div>
+  <input id="yearSlider" type="range" min="1910" max="2014" step="1" value="1910"
+    oninput="changeYear(this.value)" onchange="changeYear(this.value)"
+    onload="changeYear(this.value)"/>
+</div>
+<script src="/js/baby-name-map.js"></script><div class="section" id="using-and-understanding-this-map">
+<h2>Using and Understanding this Map</h2>
+<p>To use the map above, select a name from the dropdown list (you should be able to type a name if you don't want to scroll), then drag the slider to move in time between the years 1910 and 2014. The color hue (pink vs. blue) in each state tells you whether the name was more popular for baby girls or boys. The color tone (dark pink vs. light pink) corresponds to the name's popularity among babies of that gender. &quot;Popularity&quot; is measured by the percentage of babies of either gender given that name.</p>
+<p>For ideas on where to start, try out some of the more popular gender neutral names described in a <a class="reference external" href="http://fivethirtyeight.com/features/there-are-922-unisex-names-in-america-is-yours-one-of-them/">FiveThirtyEight article</a> such as Casey, Riley, Jessie, or Jackie. Or look at Jaime (also in that list) and see the popularity skyrocket in 1976, which turns out to be when <a class="reference external" href="http://www.imdb.com/title/tt0073965/">The Bionic Woman</a> aired on TV, portraying the adventures of a female cyborg spy named Jaime Sommers.</p>
+</div>
+<div class="section" id="why-i-made-this">
+<h2>Why I Made This</h2>
+<ol class="arabic simple">
+<li>My wife and I recently had a baby, so I've been interested in baby name trends and wanted an interactive way to visualize them.</li>
+<li>I wanted to learn how to use D3, and Mike Bostock's <a class="reference external" href="https://bl.ocks.org/mbostock/8ca036b3505121279daf">Quantile Chloropleth</a> example caught my eye.</li>
+</ol>
+<p>I'll split my discussion of this project into 3 parts: the data prep part, the D3 part, and the playing with the map part.</p>
+</div>
+<div class="section" id="the-data-prep-part">
+<h2>The Data Prep Part</h2>
+<p>I wanted the map to respond quickly to moving the slider for any given name, but I didn't want the browser to have to load in too much data at a time, so I decided to make a separate file for each name which contained all the data relevant to that name. The raw data, which I downloaded from <a class="reference external" href="https://www.kaggle.com/kaggle/us-baby-names">Kaggle</a>, (<a class="reference external" href="https://www.kaggle.com/kaggle/us-baby-names/downloads/us-baby-names-release-2015-12-18-00-53-48.zip">data download link here</a>) needed to be processed a bit before my map could use it. An IPython Notebook using the <em>pandas</em> Python module was a great tool for this purpose. You can see <a class="reference external" href="https://github.com/benlindsay/baby-name-map-preprocess/blob/master/preprocess.ipynb">my Notebook on GitHub</a>. (I'm pretty excited that GitHub now <a class="reference external" href="http://blog.jupyter.org/2015/05/07/rendering-notebooks-on-github/">renders the contents of IPython Notebooks</a> by the way.)</p>
+<p>I've been using Python (mostly <em>numpy</em>) for data analysis for a couple years now, but this was my first real introduction to <em>pandas</em>. I found the <a class="reference external" href="http://pandas.pydata.org/pandas-docs/stable/generated/pandas.DataFrame.pivot_table.html">DataFrame.pivot_table()</a> function particularly useful in this project. It allowed me to very easily create a dataframe with states as the rows and years as the columns out of a dataframe with a different row for each name.</p>
+</div>
+<div class="section" id="the-d3-part">
+<h2>The D3 Part</h2>
+<p>Creating the map using <a class="reference external" href="https://d3js.org/">D3</a>  actually wasn't too difficult. It was mostly a matter of following along with Mike Bostock's <a class="reference external" href="https://bl.ocks.org/mbostock/4060606">choropleth example</a> . Scott Murray's [D3 Tutorials] were also incredibly useful. I highly recommend them for anyone interested in checking out D3. The Javascript code used to generate the map can be seen <a class="reference external" href="https://github.com/benlindsay/baby-name-map-preprocess/blob/master/choro.js">here</a>.</p>
+</div>
+<div class="section" id="the-playing-with-the-map-part">
+<h2>The Playing With the Map Part</h2>
+<p>The gender neutral names make the most interesting visualizations, so I looked through <a class="reference external" href="http://fivethirtyeight.com/">FiveThirtyEight</a>'s list of the <a class="reference external" href="http://fivethirtyeight.com/features/there-are-922-unisex-names-in-america-is-yours-one-of-them/">most popular gender neutral names</a>.</p>
+<p>Casey, the most popular one, is interesting because of how clean the male/female split was at some points. Here's what it looked like in 1980:</p>
+<img alt="Casey in 1980" src="/images/Casey_1980.png" />
+<p>Another interesting one was Jaime. Here's the map for Jaime in 1975:</p>
+<img alt="Jaime in 1975" src="/images/Jaime_1975.png" />
+<p>Just one year later, when <a class="reference external" href="http://www.imdb.com/title/tt0073965/">The Bionic Woman</a> aired on TV, everyone must have loved Jaime, the female cyborg spy because suddenly Jaime's popularity among babies skyrocketed. Here's the map for 1976:</p>
+<img alt="Jaime in 1976" src="/images/Jaime_1976.png" />
+<p>If you see anything interesting with other names, go ahead and post below.</p>
+</div>
+
+            </div><!-- /.entry-content -->
+            <div class="comments">
+              <h3>Comments</h3>
+              <div id="disqus_thread"></div>
+              <script type="text/javascript">
+                var disqus_identifier = "projects/interactive-d3-map-of-baby-name-popularity/";
+                (function() {
+                var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+                dsq.src = 'https://benlindsay.disqus.com/embed.js';
+                (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+                })();
+              </script>
+            </div>
+
+
+        </div><!-- /.eleven.columns -->
+
+<div class="three columns">
+
+<!-- <h4>Pages</h4> -->
+
+ <!-- <ul> -->
+ <!--   -->
+ <!--      <li><a href="/blog/">Blog</a></li> -->
+ <!--   -->
+ <!--      <li><a href="/projects/">Projects</a></li> -->
+ <!--   -->
+ <!--   -->
+ <!--     -->
+ <!--   -->
+ <!--  </ul> -->
+
+<!-- <h4>Categories</h4> -->
+<!--  -->
+<!-- <ul class="blank"> -->
+<!-- 	 -->
+<!-- 		<li><a href="/blog/">Blog</a></li> -->
+<!-- 	 -->
+<!-- 		<li><a href="/projects/">Projects</a></li> -->
+<!-- 	 -->
+<!-- </ul> -->
+<!--  -->
+
+
+<h4>Tags</h4>
+	<ul class="blank">
+	    <li class="tag-1">
+              <a href="/tag/python/">python</a>
+                (2)
+                <!-- <span class="badge">2</span> -->
+            </li>
+	    <li class="tag-50">
+              <a href="/tag/productivity/">productivity</a>
+                (1)
+                <!-- <span class="badge">1</span> -->
+            </li>
+	    <li class="tag-50">
+              <a href="/tag/data-visualization/">data visualization</a>
+                (1)
+                <!-- <span class="badge">1</span> -->
+            </li>
+	    <li class="tag-50">
+              <a href="/tag/numpy/">numpy</a>
+                (1)
+                <!-- <span class="badge">1</span> -->
+            </li>
+	    <li class="tag-50">
+              <a href="/tag/d3/">d3</a>
+                (1)
+                <!-- <span class="badge">1</span> -->
+            </li>
+	    <li class="tag-50">
+              <a href="/tag/bash/">bash</a>
+                (1)
+                <!-- <span class="badge">1</span> -->
+            </li>
+</ul>
+
+
+<nav class="widget">
+  <h4>Social</h4>
+  <ul class="blank">
+    <li><a href="https://github.com/benlindsay">GitHub</a></li>
+    <li><a href="https://www.linkedin.com/in/benjlindsay">LinkedIn</a></li>
+  </ul>
+</nav>
+
+</div> </div><!-- /.row -->
+
+
+</section>
+
+       </div><!-- /.row -->
+    </div><!-- /.container -->
+
+
+       <div class="container.nopad bg">
+
+    
+        <footer id="credits" class="row">
+          <div class="seven columns left-center">
+
+                   <address id="about" class="vcard body">
+                    Proudly powered by <a href="http://getpelican.com/">Pelican</a>,
+                    which takes great advantage of <a href="http://python.org">Python</a>.
+                    <br />
+                    Based on the <a target="_blank" href="http://gumbyframework.com">Gumby Framework</a>
+                    </address>
+          </div>
+
+
+          <div class="seven columns">
+            <div class="row">
+              <ul class="socbtns">
+
+
+
+
+
+              </ul>
+            </div>
+          </div>
+        </footer>
+
+    </div>
+
+
+<script type="text/javascript">
+    var disqus_shortname = 'benlindsay';
+    (function () {
+        var s = document.createElement('script'); s.async = true;
+        s.type = 'text/javascript';
+        s.src = 'http://' + disqus_shortname + '.disqus.com/count.js';
+        (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+    }());
+</script>
+  <script src="/theme/js/libs/jquery-1.9.1.min.js"></script>
+  <script src="/theme/js/libs/gumby.min.js"></script>
+  <script src="/theme/js/plugins.js"></script>
+</body>
+</html>
