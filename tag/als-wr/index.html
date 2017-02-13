@@ -54,7 +54,7 @@
             </div>
 
 <section id="content">
-<h2>Data visualization Tag</h2>
+<h2>Als-wr Tag</h2>
   <div class="row">
     <div class="eleven columns">
       <ol id="post-list">
@@ -62,62 +62,45 @@
           <article class="hentry">
             <header>
               <h2 class="entry-title">
-                <a href="/projects/interactive-d3-map-of-baby-name-popularity/" rel="bookmark"
-                   title="Permalink to Interactive D3 Map of Baby Name Popularity">
-                  Interactive D3 Map of Baby Name Popularity
+                <a href="/blog/taking-advantage-of-sparsity-in-als-wr-algorithm/" rel="bookmark"
+                   title="Permalink to Taking Advantage of Sparsity in ALS-WR Algorithm">
+                  Taking Advantage of Sparsity in ALS-WR Algorithm
                 </a>
               </h2>
             </header>
             <footer class="post-info">
-              <abbr class="published" title="2016-07-24T00:00:00-04:00">
-                Sun 24 July 2016
+              <abbr class="published" title="2017-02-11T23:25:00-05:00">
+                Sat 11 February 2017
               </abbr>
             </footer><!-- /.post-info -->
 
             <div class="spacer"></div>
 
             <div class="entry-content">
-              <link href="/css/baby-name-map.css" rel="stylesheet" type="text/css">
-<script src="/js/libs/d3.v3.min.js"></script>
-<script src="/js/libs/queue.v1.min.js"></script>
-<script src="/js/libs/topojson.v1.min.js"></script>
-<script src="/js/libs/jquery.min.js"></script>
-<div id="mapNameContainer" style="display: table; margin: 0 auto;">
-  Choose a name:
-  <select id="dropdown" name="Options:" onchange="changeName(this.value)">
-  </select>
-</div>
-<div id="mapContainer"></div>
-<div id="yearContainer" style="display: table; margin: 0 auto;">
-  <div id="yearTextContainer" style="display: table; margin: 0 auto;">
-    <p id="yearText">Year: 1910</p>
-  </div>
-  <input id="yearSlider" type="range" min="1910" max="2014" step="1" value="1910"
-    oninput="changeYear(this.value)" onchange="changeYear(this.value)"
-    onload="changeYear(this.value)"/>
-</div>
-<script src="/js/baby-name-map.js"></script><div class="section" id="using-and-understanding-this-map">
-<h2>Using and Understanding this Map</h2>
-<p>To use the map above, select a name from the dropdown list (you should be ...</p></div>
+              <p class="first last">The ALS-WR algorithm works well for recommender systems involving a sparse matrix of users by items to review, which happens when most people only review a small subset of many possible items (businesses, movies, etc.). By tweaking the code from a great tutorial to take advantage of this sparsity, I was able to dramatically reduce the computation time.</p>
+
             </div><!-- /.entry-content -->
 
             <div class="medium primary btn">
-              <a href="/projects/interactive-d3-map-of-baby-name-popularity/" rel="bookmark"
-                 title="Permalink to Interactive D3 Map of Baby Name Popularity">
+              <a href="/blog/taking-advantage-of-sparsity-in-als-wr-algorithm/" rel="bookmark"
+                 title="Permalink to Taking Advantage of Sparsity in ALS-WR Algorithm">
                 Read more <i class="icon-arrow-right"></i>
               </a>
             </div>
 
             <div class="row tag-row">
               <span>Tagged as : </span>
+              <a class="danger label" href="/tag/als-wr/">
+                als-wr
+              </a>
               <a class="danger label" href="/tag/python/">
                 python
               </a>
-              <a class="danger label" href="/tag/d3/">
-                d3
+              <a class="danger label" href="/tag/machine-learning/">
+                machine learning
               </a>
-              <a class="danger label" href="/tag/data-visualization/">
-                data visualization
+              <a class="danger label" href="/tag/recommender-systems/">
+                recommender systems
               </a>
             </div>
 
