@@ -72,8 +72,8 @@
             </footer><!-- /.post-info -->
             <div class="spacer"></div>
             <div class="entry-content">
-              <p>If you want to manipulate and analyze data, and show the results alongside the code that generated them, using <a class="reference external" href="http://pandas.pydata.org/">Pandas</a> dataframes within a <a class="reference external" href="http://jupyter.org/">Jupyter</a> notebook is a great way to do it. But when your dataset is too large to fit in memory on your local computer, your notebook hangs when you try to load the data. But that doesn't necessarily mean you have to leave the comfort of Pandas + Jupyter and go to some cloud-computing platform. An amazing Python library called <a class="reference external" href="http://dask.pydata.org/">Dask</a> lets you do all your Pandas-style dataframe manipulations with just a few simple tweaks so you don't have to worry about Jupyter freezing up.</p>
-<p><a class="reference external" href="http://arielrodriguezromero.com/">Ariel Rodriquez</a> introduced me to Dask during the course of analyzing data to build a recommender system as a part of the <a class="reference external" href="http://penndsg.com/">Penn Data Science Group</a> I co-founded with <a class="reference external" href="http://jennhwang.me/">Jenn Hwang</a>. I found Dask very impressive and convenient right off the bat. I first used it when computing baseline predictions for review scores across a training set of 90% of the US/Canada business reviews provided for the <a class="reference external" href="https://www.yelp.com/dataset_challenge">Yelp Dataset Challenge</a>, containing 3.6 million reviews. Before using Dask, I calculated baseline predictions for just Champaign business reviews, since that is a small subset of the data that fits easily into memory using Pandas dataframes. You can compare my Jupyter notebooks that compute the <a class="reference external" href="https://github.com/benlindsay/yelp-dataset-challenge/blob/master/ben-notebooks/champaign_ratings_baselines.ipynb">Champaign baseline errors</a> with pure Pandas and the <a class="reference external" href="https://github.com/benlindsay/yelp-dataset-challenge/blob/master/ben-notebooks/train_data_baselines.ipynb">US/Canada baseline errors</a> with Dask to see how little needs to change. Or you can just look at the excerpts below.</p>
+              <p>If you want to run some analysis on a dataset that's just a little too big to load into memory on your laptop, but you don't want to leave the comfort of using <a class="reference external" href="http://pandas.pydata.org/">Pandas</a> dataframes in a <a class="reference external" href="http://jupyter.org/">Jupyter</a> notebook, then <a class="reference external" href="http://dask.pydata.org/">Dask</a> may be just your thing. Dask is an amazing Python library that lets you do all your Pandas-style dataframe manipulations with just a few simple tweaks so you don't have to worry about Jupyter freezing up.</p>
+<p>I'll demonstrate the benefits of Dask and some of its syntax by running a calculation on business reviews provided for the <a class="reference external" href="https://www.yelp.com/dataset_challenge">Yelp Dataset Challenge</a>, which contains 3.6 million business reviews. The reviews were provided in a file where each line is a JSON object with keys that include <code>&quot;business_id&quot;</code>,  <code>&quot;user_id&quot;</code>, <code>&quot;review_id&quot;</code>, <code>&quot;stars&quot;</code>, and others. I extracted about 90% of all the JSON objects associated with businesses in Champaign, Illinois to one file as a small dataset that can be loaded into Pandas, and about 90% of all the JSON objects associated with any US/Canada business into another file as a larger dataset that does not fit into a Pandas dataframe on my laptop. You can view the notebook with all the code below <a class="reference external" href="https://github.com/benlindsay/yelp-dataset-challenge/blob/master/ben-notebooks/pandas_dask_comparison.ipynb">here on GitHub</a>.</p>
 <div class="section" id="baseline-prediction-method">
 <h2>Baseline Prediction Method</h2>
 <p>The baseline prediction method I'll show below is one of 4 methods discussed in <a class="reference external" href="http://files.grouplens.org/papers/FnT%20CF%20Recsys%20Survey.pdf">this excellent survey of collaborative filtering recommender systems</a> by Michael Ekstrand1, John Riedl, and Joseph Konstan. The methods are:</p>
@@ -98,16 +98,99 @@ b_i = \frac{1}{|U_i| + \beta_i}\sum_{u \in U_i} (r_{u,i} - b_u - \mu)
 </div>
 <p>where <span class="math">\(r_{u_i}\)</span> is the actual rating of item (business) <span class="math">\(i\)</span> given by user <span class="math">\(u\)</span>, <span class="math">\(I_u\)</span> is the set of items rated by user <span class="math">\(u\)</span>, and <span class="math">\(U_i\)</span> is the set of users who rated business <span class="math">\(i\)</span>.</p>
 </div>
-<div class="section" id="champaign-baselines">
-<h2>Champaign Baselines</h2>
-<p>Here's how I implemented those equations for the small Champaign dataset using Pandas (the full Jupyter notebook is <a class="reference external" href="https://github.com/benlindsay/yelp-dataset-challenge/blob/master/ben-notebooks/champaign_ratings_baselines.ipynb">here</a>):</p>
+<div class="section" id="loading-data">
+<h2>Loading Data</h2>
+<p>For all the following code blocks, assume we have the following imports:</p>
 <div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="kn">as</span> <span class="nn">pd</span>
-<span class="kn">import</span> <span class="nn">random</span>
-<span class="kn">import</span> <span class="nn">os</span>
-<span class="kn">from</span> <span class="nn">sklearn.metrics</span> <span class="kn">import</span> <span class="n">mean_squared_error</span>
-<span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="kn">import</span> <span class="n">KFold</span>
+<span class="kn">import</span> <span class="nn">dask.bag</span> <span class="kn">as</span> <span class="nn">db</span>
 </pre></div>
+<p>First, let's compare the data loading process for the small and large datasets. In both cases, the data are in the form of a single file with one line of JSON data for each review. Loading the Champaign data using Pandas looks like this:</p>
+<div class="highlight"><pre><span></span><span class="n">df_rev</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_json</span><span class="p">(</span><span class="s1">&#39;../preprocessed-data/all-champaign-reviews.json&#39;</span><span class="p">,</span> <span class="n">orient</span><span class="o">=</span><span class="s1">&#39;records&#39;</span><span class="p">,</span> <span class="n">lines</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="n">df_rev_champaign</span> <span class="o">=</span> <span class="n">df_rev_champaign</span><span class="p">[[</span><span class="s1">&#39;review_id&#39;</span><span class="p">,</span> <span class="s1">&#39;business_id&#39;</span><span class="p">,</span> <span class="s1">&#39;user_id&#39;</span><span class="p">,</span> <span class="s1">&#39;stars&#39;</span><span class="p">]]</span>
+</pre></div>
+<p>For the larger US/Canada training set, loading the data using Dask looks like this:</p>
+<div class="highlight"><pre><span></span><span class="n">dict_bag</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">read_text</span><span class="p">(</span><span class="s1">&#39;../preprocessed-data/reviews_train.json&#39;</span><span class="p">,</span> <span class="n">blocksize</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="mf">5e6</span><span class="p">))</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">)</span>
+<span class="n">df_rev</span> <span class="o">=</span> <span class="n">dict_bag</span><span class="o">.</span><span class="n">to_dataframe</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;review_id&#39;</span><span class="p">,</span> <span class="s1">&#39;business_id&#39;</span><span class="p">,</span> <span class="s1">&#39;user_id&#39;</span><span class="p">,</span> <span class="s1">&#39;stars&#39;</span><span class="p">])</span>
+<span class="n">df_rev</span> <span class="o">=</span> <span class="n">df_rev</span><span class="o">.</span><span class="n">repartition</span><span class="p">(</span><span class="n">npartitions</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+</pre></div>
+<p>When loading in larger-than-memory data, Dask splits the data into partitions no larger than <code>blocksize</code>. You want to ensure you have enough partitions to ensure your computer doesn't freeze, but too many will slow down the computation. For that reason, after I make a dataframe from a small subset of the features I read in, I repartition the data to reduce the number of partitions to 10. After the data are loaded in, you can treat your Dask datafame just like a Pandas dataframe (for the most part).</p>
+</div>
+<div class="section" id="computing-prediction-error">
+<h2>Computing Prediction Error</h2>
+<p>For these baseline tests, I use the root mean squared error (RMSE) to measure the baseline accuracy. When dealing with Pandas dataframes, I can use a function like this:</p>
+<div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">rmse_pandas</span><span class="p">(</span><span class="n">y_true</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">):</span>
+    <span class="n">diff_sq</span> <span class="o">=</span> <span class="p">(</span><span class="n">y_true</span> <span class="o">-</span> <span class="n">y_pred</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">diff_sq</span><span class="o">.</span><span class="n">mean</span><span class="p">())</span>
+</pre></div>
+<p>In Dask, I can do the same thing with just an extra <code>.compute()</code> added, like so:</p>
+<div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">rmse_dask</span><span class="p">(</span><span class="n">y_true</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">):</span>
+    <span class="n">diff_sq</span> <span class="o">=</span> <span class="p">(</span><span class="n">y_true</span> <span class="o">-</span> <span class="n">y_pred</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">diff_sq</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="o">.</span><span class="n">compute</span><span class="p">())</span>
+</pre></div>
+<p>This is necessary because Dask uses &quot;lazy evaluation&quot; by default, and only computes results when you tell it to.</p>
+</div>
+<div class="section" id="splitting-dataframe-into-train-and-test-sets">
+<h2>Splitting Dataframe into Train and Test Sets</h2>
+<p>Splitting the Pandas dataframe:</p>
+<div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="kn">import</span> <span class="n">train_test_split</span>
+<span class="n">df_train_champaign</span><span class="p">,</span> <span class="n">df_test_champaign</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span><span class="n">df_rev_champaign</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">test_size</span><span class="o">=</span><span class="mf">0.2</span><span class="p">)</span>
+</pre></div>
+<p>Splitting the Dask dataframe:</p>
+<div class="highlight"><pre><span></span><span class="n">df_train</span><span class="p">,</span> <span class="n">df_test</span> <span class="o">=</span> <span class="n">df_rev</span><span class="o">.</span><span class="n">random_split</span><span class="p">([</span><span class="mf">0.8</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">],</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+</pre></div>
+<p>Unfortunately we can't use Scikit-learn on Dask dataframes, but a lot of the essential capabilities of Scikit-learn are implemented in Dask, or Dask compatible libraries.</p>
+</div>
+<div class="section" id="computing-baselines">
+<h2>Computing Baselines</h2>
+<p>Now here's the exciting part: the actual baseline computation uses the exact same code no matter whether it's a Dask or Pandas dataframe. Here's the function that computes the baseline predictions:</p>
+<div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">compute_baseline_rmse</span><span class="p">(</span><span class="n">df_train</span><span class="p">,</span> <span class="n">df_test</span><span class="p">,</span> <span class="n">beta_u</span><span class="p">,</span> <span class="n">beta_i</span><span class="p">,</span> <span class="n">rmse_func</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    df_train and df_test are either Pandas or Dask dataframes</span>
+<span class="sd">    that must contain the columns &#39;user_id&#39;, &#39;business_id&#39;, and &#39;stars&#39;.</span>
+<span class="sd">    beta_u and beta_i are user and business damping factors, respectively.</span>
+<span class="sd">    rmse_func is a function that computes the RMSE of the prediction</span>
+<span class="sd">    and takes Pandas or Dask Series objects, depending on whether</span>
+<span class="sd">    df_train and df_test are Pandas or Dask Dataframes.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Get mean rating of all training ratings</span>
+    <span class="n">train_mean</span> <span class="o">=</span> <span class="n">df_train</span><span class="p">[</span><span class="s1">&#39;stars&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+    <span class="c1"># Get dataframe of b_u part of baseline for each user id</span>
+    <span class="n">user_group</span> <span class="o">=</span> <span class="n">df_train</span><span class="p">[[</span><span class="s1">&#39;user_id&#39;</span><span class="p">,</span> <span class="s1">&#39;stars&#39;</span><span class="p">]]</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">&#39;user_id&#39;</span><span class="p">)</span>
+    <span class="n">df_train_user</span> <span class="o">=</span> <span class="n">user_group</span><span class="o">.</span><span class="n">agg</span><span class="p">([</span><span class="s1">&#39;sum&#39;</span><span class="p">,</span> <span class="s1">&#39;count&#39;</span><span class="p">])[</span><span class="s1">&#39;stars&#39;</span><span class="p">]</span>
+    <span class="n">df_train_user</span><span class="p">[</span><span class="s1">&#39;b_u&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">df_train_user</span><span class="p">[</span><span class="s1">&#39;sum&#39;</span><span class="p">]</span> <span class="o">-</span> <span class="n">train_mean</span> <span class="o">*</span> <span class="n">df_train_user</span><span class="p">[</span><span class="s1">&#39;count&#39;</span><span class="p">])</span>
+    <span class="n">df_train_user</span><span class="p">[</span><span class="s1">&#39;b_u&#39;</span><span class="p">]</span> <span class="o">/=</span> <span class="p">(</span><span class="n">df_train_user</span><span class="p">[</span><span class="s1">&#39;count&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="n">beta_u</span><span class="p">)</span>
+    <span class="c1"># Create column of b_u values corresponding to the user who made the review</span>
+    <span class="n">df_train</span> <span class="o">=</span> <span class="n">df_train</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">df_train_user</span><span class="p">[[</span><span class="s1">&#39;b_u&#39;</span><span class="p">]],</span> <span class="n">on</span><span class="o">=</span><span class="s1">&#39;user_id&#39;</span><span class="p">)</span>
+    <span class="c1"># Add column representing the expression inside the summation part of the b_i equation</span>
+    <span class="n">df_train</span><span class="p">[</span><span class="s1">&#39;b_i_sum&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df_train</span><span class="p">[</span><span class="s1">&#39;stars&#39;</span><span class="p">]</span> <span class="o">-</span> <span class="n">df_train</span><span class="p">[</span><span class="s1">&#39;b_u&#39;</span><span class="p">]</span> <span class="o">-</span> <span class="n">train_mean</span>
+    <span class="c1"># Average over each business to get the actual b_i values for each business</span>
+    <span class="n">bus_group</span> <span class="o">=</span> <span class="n">df_train</span><span class="p">[[</span><span class="s1">&#39;business_id&#39;</span><span class="p">,</span> <span class="s1">&#39;b_i_sum&#39;</span><span class="p">]]</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">&#39;business_id&#39;</span><span class="p">)</span>
+    <span class="n">df_train_bus</span> <span class="o">=</span> <span class="n">bus_group</span><span class="o">.</span><span class="n">agg</span><span class="p">([</span><span class="s1">&#39;sum&#39;</span><span class="p">,</span> <span class="s1">&#39;count&#39;</span><span class="p">])[</span><span class="s1">&#39;b_i_sum&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;sum&#39;</span><span class="p">:</span> <span class="s1">&#39;b_i&#39;</span><span class="p">})</span>
+    <span class="n">df_train_bus</span><span class="p">[</span><span class="s1">&#39;b_i&#39;</span><span class="p">]</span> <span class="o">/=</span> <span class="n">df_train_bus</span><span class="p">[</span><span class="s1">&#39;count&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="n">beta_i</span>
+    <span class="c1"># Join b_u and b_i columns to test dataframe</span>
+    <span class="n">df_test</span> <span class="o">=</span> <span class="n">df_test</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">df_train_user</span><span class="p">[[</span><span class="s1">&#39;b_u&#39;</span><span class="p">]],</span> <span class="n">on</span><span class="o">=</span><span class="s1">&#39;user_id&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="n">df_train_user</span><span class="p">[</span><span class="s1">&#39;b_u&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">())</span>
+    <span class="n">df_test</span> <span class="o">=</span> <span class="n">df_test</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">df_train_bus</span><span class="p">[[</span><span class="s1">&#39;b_i&#39;</span><span class="p">]],</span> <span class="n">on</span><span class="o">=</span><span class="s1">&#39;business_id&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="n">df_train_bus</span><span class="p">[</span><span class="s1">&#39;b_i&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">())</span>
+    <span class="c1"># Predict and Compute error</span>
+    <span class="n">df_test</span><span class="p">[</span><span class="s1">&#39;pred&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df_test</span><span class="p">[</span><span class="s1">&#39;b_u&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="n">df_test</span><span class="p">[</span><span class="s1">&#39;b_i&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="n">train_mean</span>
+    <span class="n">error</span> <span class="o">=</span> <span class="n">rmse_func</span><span class="p">(</span><span class="n">df_test</span><span class="p">[</span><span class="s1">&#39;stars&#39;</span><span class="p">],</span> <span class="n">df_test</span><span class="p">[</span><span class="s1">&#39;pred&#39;</span><span class="p">])</span>
+    <span class="k">print</span><span class="p">(</span><span class="s1">&#39;Error = {}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">error</span><span class="p">))</span>
+</pre></div>
+<p>I call that function using either</p>
+<div class="highlight"><pre><span></span><span class="n">compute_baseline_rmse</span><span class="p">(</span><span class="n">df_train_champaign</span><span class="p">,</span> <span class="n">df_test_champaign</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="n">rmse_pandas</span><span class="p">)</span>
+</pre></div>
+<p>for the Champaign Pandas dataframes or</p>
+<div class="highlight"><pre><span></span><span class="n">compute_baseline_rmse</span><span class="p">(</span><span class="n">df_train</span><span class="p">,</span> <span class="n">df_test</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="n">rmse_dask</span><span class="p">)</span>
+</pre></div>
+<p>for the US/Canada Dask dataframes. Note that even relatively simple calculations like these can still take a long time if you're just running on your laptop, especially if you more partitions than necessary.</p>
+</div>
+<div class="section" id="conclusion">
+<h2>Conclusion</h2>
+<p>If you want to do dataframe manipulations or standard machine learning on a dataset that's just a little bigger than the memory you have available, I highly recommend Dask. For more complex computations or bigger datasets, you might want to stick with something fancier like Spark clusters in the cloud.</p>
+</div>
+<div class="section" id="acknowledgments">
+<h2>Acknowledgments</h2>
+<p>Thanks to <a class="reference external" href="http://arielrodriguezromero.com/">Ariel Rodriquez</a> for introducing me to Dask, and thanks to <a class="reference external" href="https://sakura9096.github.io/">Claire Zhang</a> for finding the survey of collaborative filtering systems.</p>
 </div>
 <script type='text/javascript'>if (!document.getElementById('mathjaxscript_pelican_#%@#$@#')) {
     var align = "center",
@@ -266,7 +349,7 @@ b_i = \frac{1}{|U_i| + \beta_i}\sum_{u \in U_i} (r_{u,i} - b_u - \mu)
       <a href="/tag/als-wr/">als-wr</a>
 (1)    </li>
     <li class="tag-50">
-      <a href="/tag/jupyter/">jupyter</a>
+      <a href="/tag/productivity/">productivity</a>
 (1)    </li>
     <li class="tag-50">
       <a href="/tag/big-data/">big data</a>
@@ -282,9 +365,6 @@ b_i = \frac{1}{|U_i| + \beta_i}\sum_{u \in U_i} (r_{u,i} - b_u - \mu)
 (1)    </li>
     <li class="tag-50">
       <a href="/tag/machine-learning/">machine learning</a>
-(1)    </li>
-    <li class="tag-50">
-      <a href="/tag/productivity/">productivity</a>
 (1)    </li>
     <li class="tag-50">
       <a href="/tag/numpy/">numpy</a>
