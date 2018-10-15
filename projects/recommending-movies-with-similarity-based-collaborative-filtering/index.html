@@ -1,0 +1,1484 @@
+<!DOCTYPE html>
+<html lang="en" prefix="og: http://ogp.me/ns# fb: https://www.facebook.com/2008/fbml">
+<head>
+    <title>Recommending Movies with Similarity-Based Collaborative Filtering - Ben Lindsay</title>
+    <!-- Using the latest rendering mode for IE -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+
+
+<style type="text/css">
+
+/*some stuff for output/input prompts*/
+div.cell{border:1px solid transparent;display:-webkit-box;-webkit-box-orient:vertical;-webkit-box-align:stretch;display:-moz-box;-moz-box-orient:vertical;-moz-box-align:stretch;display:box;box-orient:vertical;box-align:stretch;display:flex;flex-direction:column;align-items:stretch}div.cell.selected{border-radius:4px;border:thin #ababab solid}
+div.cell.edit_mode{border-radius:4px;border:thin #008000 solid}
+div.cell{width:100%;padding:5px 5px 5px 0;margin:0;outline:none}
+div.prompt{min-width:11ex;padding:.4em;margin:0;font-family:monospace;text-align:right;line-height:1.21429em}
+@media (max-width:480px){div.prompt{text-align:left}}div.inner_cell{display:-webkit-box;-webkit-box-orient:vertical;-webkit-box-align:stretch;display:-moz-box;-moz-box-orient:vertical;-moz-box-align:stretch;display:box;box-orient:vertical;box-align:stretch;display:flex;flex-direction:column;align-items:stretch;-webkit-box-flex:1;-moz-box-flex:1;box-flex:1;flex:1}
+div.input_area{border:1px solid #cfcfcf;border-radius:4px;background:#f7f7f7;line-height:1.21429em}
+div.prompt:empty{padding-top:0;padding-bottom:0}
+div.input{page-break-inside:avoid;display:-webkit-box;-webkit-box-orient:horizontal;-webkit-box-align:stretch;display:-moz-box;-moz-box-orient:horizontal;-moz-box-align:stretch;display:box;box-orient:horizontal;box-align:stretch;}
+div.inner_cell{width:90%;}
+div.input_area{border:1px solid #cfcfcf;border-radius:4px;background:#f7f7f7;}
+div.input_prompt{color:navy;border-top:1px solid transparent;}
+div.output_wrapper{margin-top:5px;position:relative;display:-webkit-box;-webkit-box-orient:vertical;-webkit-box-align:stretch;display:-moz-box;-moz-box-orient:vertical;-moz-box-align:stretch;display:box;box-orient:vertical;box-align:stretch;width:100%;}
+div.output_scroll{height:24em;width:100%;overflow:auto;border-radius:4px;-webkit-box-shadow:inset 0 2px 8px rgba(0, 0, 0, 0.8);-moz-box-shadow:inset 0 2px 8px rgba(0, 0, 0, 0.8);box-shadow:inset 0 2px 8px rgba(0, 0, 0, 0.8);}
+div.output_collapsed{margin:0px;padding:0px;display:-webkit-box;-webkit-box-orient:vertical;-webkit-box-align:stretch;display:-moz-box;-moz-box-orient:vertical;-moz-box-align:stretch;display:box;box-orient:vertical;box-align:stretch;width:100%;}
+div.out_prompt_overlay{height:100%;padding:0px 0.4em;position:absolute;border-radius:4px;}
+div.out_prompt_overlay:hover{-webkit-box-shadow:inset 0 0 1px #000000;-moz-box-shadow:inset 0 0 1px #000000;box-shadow:inset 0 0 1px #000000;background:rgba(240, 240, 240, 0.5);}
+div.output_prompt{color:darkred;}
+
+a.anchor-link:link{text-decoration:none;padding:0px 20px;visibility:hidden;}
+h1:hover .anchor-link,h2:hover .anchor-link,h3:hover .anchor-link,h4:hover .anchor-link,h5:hover .anchor-link,h6:hover .anchor-link{visibility:visible;}
+/* end stuff for output/input prompts*/
+
+
+.highlight-ipynb .hll { background-color: #ffffcc }
+.highlight-ipynb  { background: #f8f8f8; }
+.highlight-ipynb .c { color: #408080; font-style: italic } /* Comment */
+.highlight-ipynb .err { border: 1px solid #FF0000 } /* Error */
+.highlight-ipynb .k { color: #008000; font-weight: bold } /* Keyword */
+.highlight-ipynb .o { color: #666666 } /* Operator */
+.highlight-ipynb .cm { color: #408080; font-style: italic } /* Comment.Multiline */
+.highlight-ipynb .cp { color: #BC7A00 } /* Comment.Preproc */
+.highlight-ipynb .c1 { color: #408080; font-style: italic } /* Comment.Single */
+.highlight-ipynb .cs { color: #408080; font-style: italic } /* Comment.Special */
+.highlight-ipynb .gd { color: #A00000 } /* Generic.Deleted */
+.highlight-ipynb .ge { font-style: italic } /* Generic.Emph */
+.highlight-ipynb .gr { color: #FF0000 } /* Generic.Error */
+.highlight-ipynb .gh { color: #000080; font-weight: bold } /* Generic.Heading */
+.highlight-ipynb .gi { color: #00A000 } /* Generic.Inserted */
+.highlight-ipynb .go { color: #888888 } /* Generic.Output */
+.highlight-ipynb .gp { color: #000080; font-weight: bold } /* Generic.Prompt */
+.highlight-ipynb .gs { font-weight: bold } /* Generic.Strong */
+.highlight-ipynb .gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+.highlight-ipynb .gt { color: #0044DD } /* Generic.Traceback */
+.highlight-ipynb .kc { color: #008000; font-weight: bold } /* Keyword.Constant */
+.highlight-ipynb .kd { color: #008000; font-weight: bold } /* Keyword.Declaration */
+.highlight-ipynb .kn { color: #008000; font-weight: bold } /* Keyword.Namespace */
+.highlight-ipynb .kp { color: #008000 } /* Keyword.Pseudo */
+.highlight-ipynb .kr { color: #008000; font-weight: bold } /* Keyword.Reserved */
+.highlight-ipynb .kt { color: #B00040 } /* Keyword.Type */
+.highlight-ipynb .m { color: #666666 } /* Literal.Number */
+.highlight-ipynb .s { color: #BA2121 } /* Literal.String */
+.highlight-ipynb .na { color: #7D9029 } /* Name.Attribute */
+.highlight-ipynb .nb { color: #008000 } /* Name.Builtin */
+.highlight-ipynb .nc { color: #0000FF; font-weight: bold } /* Name.Class */
+.highlight-ipynb .no { color: #880000 } /* Name.Constant */
+.highlight-ipynb .nd { color: #AA22FF } /* Name.Decorator */
+.highlight-ipynb .ni { color: #999999; font-weight: bold } /* Name.Entity */
+.highlight-ipynb .ne { color: #D2413A; font-weight: bold } /* Name.Exception */
+.highlight-ipynb .nf { color: #0000FF } /* Name.Function */
+.highlight-ipynb .nl { color: #A0A000 } /* Name.Label */
+.highlight-ipynb .nn { color: #0000FF; font-weight: bold } /* Name.Namespace */
+.highlight-ipynb .nt { color: #008000; font-weight: bold } /* Name.Tag */
+.highlight-ipynb .nv { color: #19177C } /* Name.Variable */
+.highlight-ipynb .ow { color: #AA22FF; font-weight: bold } /* Operator.Word */
+.highlight-ipynb .w { color: #bbbbbb } /* Text.Whitespace */
+.highlight-ipynb .mf { color: #666666 } /* Literal.Number.Float */
+.highlight-ipynb .mh { color: #666666 } /* Literal.Number.Hex */
+.highlight-ipynb .mi { color: #666666 } /* Literal.Number.Integer */
+.highlight-ipynb .mo { color: #666666 } /* Literal.Number.Oct */
+.highlight-ipynb .sb { color: #BA2121 } /* Literal.String.Backtick */
+.highlight-ipynb .sc { color: #BA2121 } /* Literal.String.Char */
+.highlight-ipynb .sd { color: #BA2121; font-style: italic } /* Literal.String.Doc */
+.highlight-ipynb .s2 { color: #BA2121 } /* Literal.String.Double */
+.highlight-ipynb .se { color: #BB6622; font-weight: bold } /* Literal.String.Escape */
+.highlight-ipynb .sh { color: #BA2121 } /* Literal.String.Heredoc */
+.highlight-ipynb .si { color: #BB6688; font-weight: bold } /* Literal.String.Interpol */
+.highlight-ipynb .sx { color: #008000 } /* Literal.String.Other */
+.highlight-ipynb .sr { color: #BB6688 } /* Literal.String.Regex */
+.highlight-ipynb .s1 { color: #BA2121 } /* Literal.String.Single */
+.highlight-ipynb .ss { color: #19177C } /* Literal.String.Symbol */
+.highlight-ipynb .bp { color: #008000 } /* Name.Builtin.Pseudo */
+.highlight-ipynb .vc { color: #19177C } /* Name.Variable.Class */
+.highlight-ipynb .vg { color: #19177C } /* Name.Variable.Global */
+.highlight-ipynb .vi { color: #19177C } /* Name.Variable.Instance */
+.highlight-ipynb .il { color: #666666 } /* Literal.Number.Integer.Long */
+</style>
+
+<style type="text/css">
+/* Overrides of notebook CSS for static HTML export */
+div.entry-content {
+  overflow: visible;
+  padding: 8px;
+}
+.input_area {
+  padding: 0.2em;
+}
+
+a.heading-anchor {
+ white-space: normal;
+}
+
+.rendered_html
+code {
+ font-size: .8em;
+}
+
+pre.ipynb {
+  color: black;
+  background: #f7f7f7;
+  border: none;
+  box-shadow: none;
+  margin-bottom: 0;
+  padding: 0;
+  margin: 0px;
+  font-size: 13px;
+}
+
+/* remove the prompt div from text cells */
+div.text_cell .prompt {
+    display: none;
+}
+
+/* remove horizontal padding from text cells, */
+/* so it aligns with outer body text */
+div.text_cell_render {
+    padding: 0.5em 0em;
+}
+
+img.anim_icon{padding:0; border:0; vertical-align:middle; -webkit-box-shadow:none; -box-shadow:none}
+
+div.collapseheader {
+    width=100%;
+    padding: 2px;
+    cursor: pointer;
+    font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;
+}
+
+</style>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_HTML" type="text/javascript"></script>
+<script type="text/javascript">
+init_mathjax = function() {
+    if (window.MathJax) {
+        // MathJax loaded
+        MathJax.Hub.Config({
+            tex2jax: {
+                inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+                displayMath: [ ['$$','$$'], ["\\[","\\]"] ]
+            },
+            displayAlign: 'left', // Change this to 'center' to center equations.
+            "HTML-CSS": {
+                styles: {'.MathJax_Display': {"margin": 0}}
+            }
+        });
+        MathJax.Hub.Queue(["Typeset",MathJax.Hub]);
+    }
+}
+init_mathjax();
+</script>
+
+<link rel="canonical" href="/projects/recommending-movies-with-similarity-based-collaborative-filtering/">
+
+        <meta name="author" content="Ben Lindsay" />
+        <meta name="keywords" content="python,pandas,recommender systems,jupyter,seaborn,k-nearest neighbors" />
+        <meta name="description" content="This is the third post of a project on collaborative filtering based on the MovieLens 100K dataset. The remainder of this post is straight out of a Jupyter Notebook file you can download here. You can also see it here on GitHub. Now that we&#39;ve established some simple baseline models …" />
+
+        <meta property="og:site_name" content="Ben Lindsay" />
+        <meta property="og:type" content="article"/>
+        <meta property="og:title" content="Recommending Movies with Similarity-Based Collaborative Filtering"/>
+        <meta property="og:url" content="/projects/recommending-movies-with-similarity-based-collaborative-filtering/"/>
+        <meta property="og:description" content="This is the third post of a project on collaborative filtering based on the MovieLens 100K dataset. The remainder of this post is straight out of a Jupyter Notebook file you can download here. You can also see it here on GitHub. Now that we&#39;ve established some simple baseline models …"/>
+        <meta property="article:published_time" content="2018-10-14" />
+            <meta property="article:section" content="Projects" />
+            <meta property="article:tag" content="python" />
+            <meta property="article:tag" content="pandas" />
+            <meta property="article:tag" content="recommender systems" />
+            <meta property="article:tag" content="jupyter" />
+            <meta property="article:tag" content="seaborn" />
+            <meta property="article:tag" content="k-nearest neighbors" />
+            <meta property="article:author" content="Ben Lindsay" />
+
+
+
+    <!-- Bootstrap -->
+        <link rel="stylesheet" href="/theme/css/bootstrap.min.css" type="text/css"/>
+    <link href="/theme/css/font-awesome.min.css" rel="stylesheet">
+
+    <link href="/theme/css/pygments/default.css" rel="stylesheet">
+    <link rel="stylesheet" href="/theme/css/style.css" type="text/css"/>
+
+
+
+
+
+    <!-- <link rel="stylesheet" href="cdn.pydata.org/bokeh/release/bokeh-0.12.15.min.css"; type="text/css" /> -->
+    <!-- <script type="text/javascript" src="cdn.pydata.org/bokeh/release/bokeh-0.12.15.min.js"></script> -->
+    <!-- <script type="text/javascript"> Bokeh.set_log_level("info"); </script> -->
+</head>
+<body>
+
+<div class="navbar navbar-default navbar-fixed-top" role="navigation">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a href="/" class="navbar-brand">
+Ben Lindsay            </a>
+        </div>
+        <div class="collapse navbar-collapse navbar-ex1-collapse">
+            <ul class="nav navbar-nav">
+                    <li><a href="/blog/">Blog</a></li>
+                    <li><a href="/projects/">Projects</a></li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+              <li><a href="/archives/"><i class="fa fa-th-list"></i><span class="icon-label">Archives</span></a></li>
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+</div> <!-- /.navbar -->
+
+<!-- Banner -->
+<!-- End Banner -->
+
+<!-- Content Container -->
+<div class="container">
+    <div class="row">
+        <div class="col-sm-9">
+    <section id="content">
+        <article>
+            <header class="page-header">
+                <h1>
+                    <a href="/projects/recommending-movies-with-similarity-based-collaborative-filtering/"
+                       rel="bookmark"
+                       title="Permalink to Recommending Movies with Similarity-Based Collaborative Filtering">
+                        Recommending Movies with Similarity-Based Collaborative Filtering
+                    </a>
+                </h1>
+            </header>
+            <div class="entry-content">
+                <!-- <div class="panel"> -->
+                <!--     <div class="panel-body"> -->
+<footer class="post-info row">
+  <div class="col-sm-12">
+    <time class="published" datetime="2018-10-14T16:41:00-04:00">
+      Sun 14 October 2018
+    </time>
+    &nbsp; | &nbsp;
+    <a href="/projects/"><i class="fa fa-folder-open"></i> Projects</a>
+  </div>
+  <div class="spacer"></div>
+
+    <!-- <span class="label label-default">Date</span> -->
+    <!-- <span class="published"> -->
+    <!--     <i class="fa fa-calendar"></i><time datetime="2018-10-14T16:41:00-04:00"> Sun 14 October 2018</time> -->
+    <!-- </span> -->
+    <!--  -->
+
+
+
+
+
+    <div class="col-sm-12">
+<a href="/tag/python/" class="nounderline">
+  <button type="button" class="btn tag-btn">
+    python
+  </button>
+</a>
+<a href="/tag/pandas/" class="nounderline">
+  <button type="button" class="btn tag-btn">
+    pandas
+  </button>
+</a>
+<a href="/tag/recommender-systems/" class="nounderline">
+  <button type="button" class="btn tag-btn">
+    recommender systems
+  </button>
+</a>
+<a href="/tag/jupyter/" class="nounderline">
+  <button type="button" class="btn tag-btn">
+    jupyter
+  </button>
+</a>
+<a href="/tag/seaborn/" class="nounderline">
+  <button type="button" class="btn tag-btn">
+    seaborn
+  </button>
+</a>
+<a href="/tag/k-nearest-neighbors/" class="nounderline">
+  <button type="button" class="btn tag-btn">
+    k-nearest neighbors
+  </button>
+</a>
+    </div>
+    
+    <div class="col-sm-12 spacer"></div>
+</footer><!-- /.post-info -->                    <!-- </div> -->
+                <!-- </div> -->
+<section class="well" id="related-posts">
+    <h4>Part 3 of the MovieLens Project series</h4>
+       <h5>Previous articles</h5>
+       <ul>
+           <li><a href="/projects/exploratory-data-analysis-of-movielens-dataset/">Exploratory Data Analysis of MovieLens Dataset</a></li>
+           <li><a href="/projects/baseline-models-for-collaborative-filtering/">Baseline Models for Collaborative Filtering</a></li>
+       </ul>
+       <h5>Next articles</h5>
+       <ul>
+           <li><a href="/projects/recommending-movies-with-alternating-least-squares/">Recommending Movies with Alternating Least Squares</a></li>
+           <li><a href="/projects/recommending-movies-with-stochastic-gradient-descent/">Recommending Movies with Stochastic Gradient Descent</a></li>
+           <li><a href="/projects/comparing-collaborative-filtering-models/">Comparing Collaborative Filtering Models</a></li>
+       </ul>
+</section>
+                <p>This is the third post of a project on collaborative filtering based on the MovieLens 100K dataset. The remainder of this post is straight out of a Jupyter Notebook file you can download <a href="/notebooks/2018-10-14_03_Similarity-based_CF.ipynb">here</a>. You can also see it <a href="https://github.com/benlindsay/movielens-analysis/blob/master/03_Similarity-based_CF.ipynb">here</a> on GitHub.</p>
+<hr>
+<p>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Now that we've established some simple baseline models and demonstrated that the Damped User + Movie Baseline model is the best of the few we tested, let's move on to some actual collaborative filtering models. Here, we'll explore user-based and item-based collaborative filtering.</p>
+<p><img src="/images/collaborativeFiltering-960x540.jpg" alt="Item-Based vs User-Based"></p>
+<p><em>Image found on <a href="http://www.salemmarafi.com/wp-content/uploads/2014/04/collaborativeFiltering-960x540.jpg">www.selemmarafi.com</a></em></p>
+<p>The idea of these methods is simply to predict unseen ratings by looking at how similar users rated a particular item, or by looking at how similar items were rated by a particular user. Both methods fall under the category of K-Nearest Neighbor (KNN) models, since ratings from the K most similar users or items are combined for the prediction.</p>
+<p>Below, I've implemented a class called <code>KNNRecommender</code> that can accept a <code>mode</code> parameter of either <code>'user'</code> or <code>'item'</code>. Let's see how it compares to our best baseline!</p>
+<h1 id="1.-Import-necessary-modules-and-classes">1. Import necessary modules and classes<a class="anchor-link" href="#1.-Import-necessary-modules-and-classes">&#182;</a></h1>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[1]:</div>
+
+<div class="collapseheader inner_cell"><span style="font-weight: bold;">Expand Code</span>
+<div class="input_area" style="display:none">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># Import necessary modules</span>
+<span class="o">%</span><span class="k">matplotlib</span> inline
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="k">import</span> <span class="n">datetime</span>
+<span class="kn">from</span> <span class="nn">functools</span> <span class="k">import</span> <span class="n">reduce</span>
+<span class="kn">from</span> <span class="nn">os.path</span> <span class="k">import</span> <span class="n">exists</span>
+<span class="kn">from</span> <span class="nn">sklearn.metrics</span> <span class="k">import</span> <span class="n">mean_absolute_error</span>
+<span class="kn">from</span> <span class="nn">sklearn.metrics.pairwise</span> <span class="k">import</span> <span class="n">cosine_similarity</span>
+<span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="k">import</span> <span class="n">KFold</span>
+<span class="kn">import</span> <span class="nn">gc</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+
+<span class="c1"># Import User + Movie baseline model</span>
+<span class="kn">from</span> <span class="nn">cf_utils</span> <span class="k">import</span> <span class="n">DampedUserMovieBaselineModel</span>
+
+<span class="c1"># Use custom matplotlib stylesheet</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="s1">&#39;./big-darkgrid.mplstyle&#39;</span><span class="p">)</span>
+</pre></div>
+
+</div>
+</div>
+
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="2.-Load-the-Data">2. Load the Data<a class="anchor-link" href="#2.-Load-the-Data">&#182;</a></h1><p>Let's load and examine the ratings data. If you're following along (i.e. actually running these notebooks) you'll need to make sure to run the first one to download the data before running this one.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[2]:</div>
+
+<div class="collapseheader inner_cell"><span style="font-weight: bold;">Expand Code</span>
+<div class="input_area" style="display:none">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">ratings_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;raw/ml-100k/u.data&#39;</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s1">&#39;</span><span class="se">\t</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> 
+                         <span class="n">names</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;userId&#39;</span><span class="p">,</span> <span class="s1">&#39;movieId&#39;</span><span class="p">,</span> <span class="s1">&#39;rating&#39;</span><span class="p">,</span> <span class="s1">&#39;timestamp&#39;</span><span class="p">])</span>
+<span class="n">ratings_df</span><span class="p">[</span><span class="s1">&#39;timestamp&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ratings_df</span><span class="p">[</span><span class="s1">&#39;timestamp&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">datetime</span><span class="o">.</span><span class="n">fromtimestamp</span><span class="p">)</span>
+<span class="n">ratings_df</span> <span class="o">=</span> <span class="n">ratings_df</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="s1">&#39;timestamp&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;First 5:&#39;</span><span class="p">)</span>
+<span class="n">display</span><span class="p">(</span><span class="n">ratings_df</span><span class="o">.</span><span class="n">head</span><span class="p">())</span>
+<span class="nb">print</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Last 5:&#39;</span><span class="p">)</span>
+<span class="n">display</span><span class="p">(</span><span class="n">ratings_df</span><span class="o">.</span><span class="n">tail</span><span class="p">())</span>
+</pre></div>
+
+</div>
+</div>
+
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+<div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre class="ipynb">First 5:
+</pre>
+</div>
+</div>
+
+<div class="output_area">
+
+<div class="prompt"></div>
+
+
+
+<div class="output_html rendered_html output_subarea ">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>userId</th>
+      <th>movieId</th>
+      <th>rating</th>
+      <th>timestamp</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>214</th>
+      <td>259</td>
+      <td>255</td>
+      <td>4</td>
+      <td>1997-09-19 23:05:10</td>
+    </tr>
+    <tr>
+      <th>83965</th>
+      <td>259</td>
+      <td>286</td>
+      <td>4</td>
+      <td>1997-09-19 23:05:27</td>
+    </tr>
+    <tr>
+      <th>43027</th>
+      <td>259</td>
+      <td>298</td>
+      <td>4</td>
+      <td>1997-09-19 23:05:54</td>
+    </tr>
+    <tr>
+      <th>21396</th>
+      <td>259</td>
+      <td>185</td>
+      <td>4</td>
+      <td>1997-09-19 23:06:21</td>
+    </tr>
+    <tr>
+      <th>82655</th>
+      <td>259</td>
+      <td>173</td>
+      <td>4</td>
+      <td>1997-09-19 23:07:23</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+
+</div>
+
+<div class="output_area">
+
+<div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre class="ipynb">
+Last 5:
+</pre>
+</div>
+</div>
+
+<div class="output_area">
+
+<div class="prompt"></div>
+
+
+
+<div class="output_html rendered_html output_subarea ">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>userId</th>
+      <th>movieId</th>
+      <th>rating</th>
+      <th>timestamp</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>46773</th>
+      <td>729</td>
+      <td>689</td>
+      <td>4</td>
+      <td>1998-04-22 19:10:38</td>
+    </tr>
+    <tr>
+      <th>73008</th>
+      <td>729</td>
+      <td>313</td>
+      <td>3</td>
+      <td>1998-04-22 19:10:38</td>
+    </tr>
+    <tr>
+      <th>46574</th>
+      <td>729</td>
+      <td>328</td>
+      <td>3</td>
+      <td>1998-04-22 19:10:38</td>
+    </tr>
+    <tr>
+      <th>64312</th>
+      <td>729</td>
+      <td>748</td>
+      <td>4</td>
+      <td>1998-04-22 19:10:38</td>
+    </tr>
+    <tr>
+      <th>79208</th>
+      <td>729</td>
+      <td>272</td>
+      <td>4</td>
+      <td>1998-04-22 19:10:38</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="3.-Write-our-KNNRecommender-class">3. Write our KNNRecommender class<a class="anchor-link" href="#3.-Write-our-KNNRecommender-class">&#182;</a></h1>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[3]:</div>
+
+<div class="collapseheader inner_cell"><span style="font-weight: bold;">Expand Code</span>
+<div class="input_area" style="display:none">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">class</span> <span class="nc">KNNRecommender</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;User-based or Item-based collaborative filtering model that operates on</span>
+<span class="sd">    dataframes with at least a user-like, item-like, and a rating-like column</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    mode : str, [&#39;item | &#39;user&#39;], default=&#39;item&#39;</span>
+<span class="sd">        Tells model whether to use item-based or user-based collaborative filtering</span>
+<span class="sd">    k : int, default=20</span>
+<span class="sd">        Number of most similar items or users to average for prediction</span>
+<span class="sd">    basline_algo : object, optional</span>
+<span class="sd">        Algorithm used to predict baseline scores for each rating. If not provided,</span>
+<span class="sd">        the mean of all training ratings is used as the baseline. If provided,</span>
+<span class="sd">        the object must have a fit(X) method and a predict(X) method</span>
+<span class="sd">    similarity_func : function, default=cosine_similarity</span>
+<span class="sd">        Function must take a numpy array M of shape (m,n) and return a numpy array</span>
+<span class="sd">        of shape (m,m) where each element i,j represents the similarity between row</span>
+<span class="sd">        i and row j of M.</span>
+<span class="sd">    loop_predict : boolean, default=True</span>
+<span class="sd">        If True, the model will loop over all user-item pairs in test set and compute</span>
+<span class="sd">        prediction individually. If False, the model will compute all ratings</span>
+<span class="sd">        simultaneously. With sparse matrices, looping is typically faster.</span>
+<span class="sd">        </span>
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    train_mean : float</span>
+<span class="sd">        Mean of the training data ratings. Used if baseline_algo is None.</span>
+<span class="sd">    rating_matrix : 2d numpy array, shape=(n_users, n_items)</span>
+<span class="sd">        Rating matrix minus baselines</span>
+<span class="sd">    user_map : pandas Series, shape=(n_users,)</span>
+<span class="sd">        Mapping from the original user id to an integer in the range [0,n_users)</span>
+<span class="sd">    item_map : pandas Series, shape=(n_items,)</span>
+<span class="sd">        Mapping from the original item id to an integer in the range [0,n_items)</span>
+<span class="sd">    knn_indices : 2d numpy array, shape=([n_users|n_items], k)</span>
+<span class="sd">        Element i,j represents the index of the jth closet [user|item] to i</span>
+<span class="sd">    knn_similarities : 2d numpy array, shape=([n_users|n_items], k)</span>
+<span class="sd">        Element i,j represents the similarity between the jth closest [user|item] to i</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;item&#39;</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">baseline_algo</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">similarity_func</span><span class="o">=</span><span class="n">cosine_similarity</span><span class="p">,</span> <span class="n">loop_predict</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">mode</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;user&#39;</span><span class="p">,</span> <span class="s1">&#39;item&#39;</span><span class="p">]:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;&#39;mode&#39; must be either &#39;user&#39; or &#39;item&#39;, not &#39;</span><span class="si">{}</span><span class="s2">&#39;!&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">mode</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">mode</span> <span class="o">=</span> <span class="n">mode</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">k</span> <span class="o">=</span> <span class="n">k</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">baseline_algo</span> <span class="o">=</span> <span class="n">baseline_algo</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">similarity_func</span> <span class="o">=</span> <span class="n">similarity_func</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">loop_predict</span> <span class="o">=</span> <span class="n">loop_predict</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">train_mean</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rating_matrix</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">user_map</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">item_map</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">knn_indices</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">knn_similarities</span> <span class="o">=</span> <span class="kc">None</span>
+        
+    <span class="k">def</span> <span class="nf">_get_rating_matrix</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Private function to generate a ratings matrx and mappings for</span>
+<span class="sd">        the user and item ids to the row and column indices</span>
+<span class="sd">        </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        X : pandas.DataFrame, shape=(n_ratings,&gt;=3)</span>
+<span class="sd">            First 3 columns must be in order of user, item, rating.</span>
+<span class="sd">        </span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        rating_matrix : 2d numpy array, shape=(n_users, n_items)</span>
+<span class="sd">        user_map : pandas Series, shape=(n_users,)</span>
+<span class="sd">            Mapping from the original user id to an integer in the range [0,n_users)</span>
+<span class="sd">        item_map : pandas Series, shape=(n_items,)</span>
+<span class="sd">            Mapping from the original item id to an integer in the range [0,n_items)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">user_col</span><span class="p">,</span> <span class="n">item_col</span><span class="p">,</span> <span class="n">rating_col</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">columns</span><span class="p">[:</span><span class="mi">3</span><span class="p">]</span>
+        <span class="n">rating</span> <span class="o">=</span> <span class="n">X</span><span class="p">[</span><span class="n">rating_col</span><span class="p">]</span>
+        <span class="n">user_map</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span>
+            <span class="n">index</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">X</span><span class="p">[</span><span class="n">user_col</span><span class="p">]),</span>
+            <span class="n">data</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">X</span><span class="p">[</span><span class="n">user_col</span><span class="p">]</span><span class="o">.</span><span class="n">nunique</span><span class="p">()),</span>
+            <span class="n">name</span><span class="o">=</span><span class="s1">&#39;user_map&#39;</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">item_map</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span>
+            <span class="n">index</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">X</span><span class="p">[</span><span class="n">item_col</span><span class="p">]),</span>
+            <span class="n">data</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">X</span><span class="p">[</span><span class="n">item_col</span><span class="p">]</span><span class="o">.</span><span class="n">nunique</span><span class="p">()),</span>
+            <span class="n">name</span><span class="o">=</span><span class="s1">&#39;columns_map&#39;</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">user_inds</span> <span class="o">=</span> <span class="n">X</span><span class="p">[</span><span class="n">user_col</span><span class="p">]</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="n">user_map</span><span class="p">)</span>
+        <span class="n">item_inds</span> <span class="o">=</span> <span class="n">X</span><span class="p">[</span><span class="n">item_col</span><span class="p">]</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="n">item_map</span><span class="p">)</span>
+        <span class="n">rating_matrix</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">pd</span><span class="o">.</span><span class="n">pivot_table</span><span class="p">(</span>
+                <span class="n">data</span><span class="o">=</span><span class="n">X</span><span class="p">,</span>
+                <span class="n">values</span><span class="o">=</span><span class="n">rating_col</span><span class="p">,</span>
+                <span class="n">index</span><span class="o">=</span><span class="n">user_inds</span><span class="p">,</span>
+                <span class="n">columns</span><span class="o">=</span><span class="n">item_inds</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+            <span class="o">.</span><span class="n">values</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="n">rating_matrix</span><span class="p">,</span> <span class="n">user_map</span><span class="p">,</span> <span class="n">item_map</span>
+
+    <span class="k">def</span> <span class="nf">_get_knn_indices_and_similarities</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rating_matrix</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Private function to find indices and similarities of k nearest</span>
+<span class="sd">        neighbors for each user or item</span>
+<span class="sd">        </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        rating_matrix : 2d numpy array, shape=(n_users, n_items)</span>
+<span class="sd">            Matrix of ratings minus baselines</span>
+<span class="sd">        </span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        knn_indices : 2d numpy array, shape=([n_users|n_items], k)</span>
+<span class="sd">            Element i,j represents the index of the jth closet [user|item] to i</span>
+<span class="sd">        knn_similarities : 2d numpy array, shape=([n_users|n_items], k)</span>
+<span class="sd">            Element i,j represents the similarity between the jth closest [user|item] to i</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">mode</span> <span class="o">==</span> <span class="s1">&#39;item&#39;</span><span class="p">:</span>
+            <span class="n">n_users_or_items</span> <span class="o">=</span> <span class="n">rating_matrix</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">n_users_or_items</span> <span class="o">=</span> <span class="n">rating_matrix</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">k</span> <span class="o">&gt;</span> <span class="n">n_users_or_items</span><span class="p">:</span>
+            <span class="n">new_k</span> <span class="o">=</span> <span class="n">n_users_or_items</span> <span class="o">-</span> <span class="mi">1</span>
+            <span class="nb">print</span><span class="p">(</span>
+                <span class="s2">&quot;Warning: k = </span><span class="si">{}</span><span class="s2"> &gt; # </span><span class="si">{}</span><span class="s2">s = </span><span class="si">{}</span><span class="s2">! Setting k to </span><span class="si">{}</span><span class="s2">&quot;</span>
+                <span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">k</span><span class="p">,</span> <span class="n">n_users_or_items</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">mode</span><span class="p">,</span> <span class="n">new_k</span><span class="p">)</span>
+            <span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">k</span> <span class="o">=</span> <span class="n">new_k</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">mode</span> <span class="o">==</span> <span class="s1">&#39;item&#39;</span><span class="p">:</span>
+            <span class="n">similarity_matrix</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">similarity_func</span><span class="p">(</span><span class="n">rating_matrix</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">similarity_matrix</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">similarity_func</span><span class="p">(</span><span class="n">rating_matrix</span><span class="p">)</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">fill_diagonal</span><span class="p">(</span><span class="n">similarity_matrix</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">knn_indices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="n">similarity_matrix</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)[:,</span> <span class="p">::</span><span class="o">-</span><span class="mi">1</span><span class="p">][:,</span> <span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">k</span><span class="p">]</span>
+        <span class="c1"># https://github.com/scikit-learn/scikit-learn/blob/a24c8b46/sklearn/neighbors/base.py#L373</span>
+        <span class="n">sample_range</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">knn_indices</span><span class="p">))[:,</span> <span class="kc">None</span><span class="p">]</span>
+        <span class="n">knn_similarities</span> <span class="o">=</span> <span class="n">similarity_matrix</span><span class="p">[</span><span class="n">sample_range</span><span class="p">,</span> <span class="n">knn_indices</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">knn_indices</span><span class="p">,</span> <span class="n">knn_similarities</span>
+    
+    <span class="k">def</span> <span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Fit model to training data X. Sets the knn_indices, knn_similarities, </span>
+<span class="sd">        rating_matrix, user_map, and item map variables.</span>
+<span class="sd">        </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        X : pandas DataFrame, shape=(n_ratings, &gt;=3)</span>
+<span class="sd">            First 3 columns must correspond to user, item, and rating in that order</span>
+<span class="sd">        </span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        self</span>
+<span class="sd">            This allows chaining like `KNNRecommender().fit(X_train).predict(X_test)`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;X must be a DataFrame&quot;</span><span class="p">)</span>
+        <span class="n">X</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="n">user_col</span><span class="p">,</span> <span class="n">item_col</span><span class="p">,</span> <span class="n">rating_col</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">columns</span><span class="p">[:</span><span class="mi">3</span><span class="p">]</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">baseline_algo</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">train_mean</span> <span class="o">=</span> <span class="n">X</span><span class="p">[</span><span class="n">rating_col</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+            <span class="n">X</span><span class="p">[</span><span class="s1">&#39;rating_baseline&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">train_mean</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">baseline_algo</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,</span> <span class="p">:</span><span class="mi">3</span><span class="p">])</span>
+            <span class="n">X</span><span class="p">[</span><span class="s1">&#39;rating_baseline&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">baseline_algo</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X</span><span class="p">[[</span><span class="n">user_col</span><span class="p">,</span> <span class="n">item_col</span><span class="p">]])</span>
+        <span class="n">X</span><span class="p">[</span><span class="s1">&#39;rating_diff&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">X</span><span class="p">[</span><span class="n">rating_col</span><span class="p">]</span> <span class="o">-</span> <span class="n">X</span><span class="p">[</span><span class="s1">&#39;rating_baseline&#39;</span><span class="p">]</span>
+        <span class="n">nodiff_rating_matrix</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_rating_matrix</span><span class="p">(</span><span class="n">X</span><span class="p">[[</span><span class="n">user_col</span><span class="p">,</span> <span class="n">item_col</span><span class="p">,</span> <span class="n">rating_col</span><span class="p">]])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">knn_indices</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">knn_similarities</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_knn_indices_and_similarities</span><span class="p">(</span>
+            <span class="n">nodiff_rating_matrix</span>
+        <span class="p">)</span>
+        <span class="n">gc</span><span class="o">.</span><span class="n">collect</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rating_matrix</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">user_map</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">item_map</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_rating_matrix</span><span class="p">(</span>
+            <span class="n">X</span><span class="p">[[</span><span class="n">user_col</span><span class="p">,</span> <span class="n">item_col</span><span class="p">,</span> <span class="s1">&#39;rating_diff&#39;</span><span class="p">]]</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span>
+
+    <span class="k">def</span> <span class="nf">_predict_1_ui_pair</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">user</span><span class="p">,</span> <span class="n">item</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Predict rating (minus baseline) for 1 user-item pair. Must add</span>
+<span class="sd">        baseline to get the rating in the original rating scale.</span>
+<span class="sd">        </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        user : int</span>
+<span class="sd">            Must be in range [0, n_users)</span>
+<span class="sd">        item : int</span>
+<span class="sd">            Must be in range [0, n_items)</span>
+<span class="sd">        </span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        rating_pred : float</span>
+<span class="sd">            Predicted ratings</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">mode</span> <span class="o">==</span> <span class="s1">&#39;item&#39;</span><span class="p">:</span>
+            <span class="n">inds_i</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">knn_indices</span><span class="p">[</span><span class="n">item</span><span class="p">,</span> <span class="p">:]</span>
+            <span class="n">sims_i</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">knn_similarities</span><span class="p">[</span><span class="n">item</span><span class="p">,</span> <span class="p">:]</span>
+            <span class="c1"># https://stackoverflow.com/a/35696047/2680824</span>
+            <span class="n">numerator</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rating_matrix</span><span class="p">[</span><span class="n">user</span><span class="p">,</span> <span class="n">inds_i</span><span class="p">]</span> <span class="o">*</span> <span class="n">sims_i</span><span class="p">)</span>
+            <span class="n">denominator</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">sims_i</span><span class="p">))</span>
+            <span class="k">with</span> <span class="n">np</span><span class="o">.</span><span class="n">errstate</span><span class="p">(</span><span class="n">divide</span><span class="o">=</span><span class="s1">&#39;ignore&#39;</span><span class="p">,</span> <span class="n">invalid</span><span class="o">=</span><span class="s1">&#39;ignore&#39;</span><span class="p">):</span>
+                <span class="n">rating_pred</span> <span class="o">=</span> <span class="n">numerator</span> <span class="o">/</span> <span class="n">denominator</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">inds_u</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">knn_indices</span><span class="p">[</span><span class="n">user</span><span class="p">,</span> <span class="p">:]</span>
+            <span class="n">sims_u</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">knn_similarities</span><span class="p">[</span><span class="n">user</span><span class="p">,</span> <span class="p">:]</span>
+            <span class="c1"># https://stackoverflow.com/a/35696047/2680824</span>
+            <span class="n">numerator</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rating_matrix</span><span class="p">[</span><span class="n">inds_u</span><span class="p">,</span> <span class="n">item</span><span class="p">]</span> <span class="o">*</span> <span class="n">sims_u</span><span class="p">)</span>
+            <span class="n">denominator</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">sims_u</span><span class="p">))</span>
+            <span class="k">with</span> <span class="n">np</span><span class="o">.</span><span class="n">errstate</span><span class="p">(</span><span class="n">divide</span><span class="o">=</span><span class="s1">&#39;ignore&#39;</span><span class="p">,</span> <span class="n">invalid</span><span class="o">=</span><span class="s1">&#39;ignore&#39;</span><span class="p">):</span>
+                <span class="n">rating_pred</span> <span class="o">=</span> <span class="n">numerator</span> <span class="o">/</span> <span class="n">denominator</span>
+        <span class="k">return</span> <span class="n">rating_pred</span>
+
+    <span class="k">def</span> <span class="nf">predict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Predict ratings for each user-item pair in X</span>
+<span class="sd">        </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        X : pandas DataFrame, shape=(n_ratings, &gt;=2)</span>
+<span class="sd">            First 2 columns of X must correspond to user and item.</span>
+<span class="sd">        </span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        pandas Series, shape=(n_ratings,)</span>
+<span class="sd">            Ratings for each user-item pair in X. No restriction on the data type</span>
+<span class="sd">            for the user and item ids, other than they must match the training indices.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;X must be a DataFrame&quot;</span><span class="p">)</span>
+        <span class="n">X</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="n">user_col</span><span class="p">,</span> <span class="n">item_col</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">columns</span><span class="p">[:</span><span class="mi">2</span><span class="p">]</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">baseline_algo</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">X</span><span class="p">[</span><span class="s1">&#39;rating_baseline&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">train_mean</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">X</span><span class="p">[</span><span class="s1">&#39;rating_baseline&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">baseline_algo</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+        <span class="n">X</span><span class="p">[</span><span class="s1">&#39;rating&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">known_user_and_item_mask</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">X</span><span class="p">[</span><span class="n">user_col</span><span class="p">]</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">user_map</span><span class="o">.</span><span class="n">index</span><span class="p">)</span> <span class="o">&amp;</span> <span class="n">X</span><span class="p">[</span><span class="n">item_col</span><span class="p">]</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">item_map</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
+        <span class="p">)</span>
+        <span class="n">X_known</span> <span class="o">=</span> <span class="n">X</span><span class="p">[</span><span class="n">known_user_and_item_mask</span><span class="p">]</span>
+        <span class="n">user_inds</span> <span class="o">=</span> <span class="n">X_known</span><span class="p">[</span><span class="n">user_col</span><span class="p">]</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">user_map</span><span class="p">)</span>
+        <span class="n">item_inds</span> <span class="o">=</span> <span class="n">X_known</span><span class="p">[</span><span class="n">item_col</span><span class="p">]</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">item_map</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">loop_predict</span><span class="p">:</span>
+            <span class="n">rating_pred</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_predict_1_ui_pair</span><span class="p">(</span><span class="n">u_ind</span><span class="p">,</span> <span class="n">i_ind</span><span class="p">)</span>
+                <span class="k">for</span> <span class="n">u_ind</span><span class="p">,</span> <span class="n">i_ind</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">user_inds</span><span class="p">,</span> <span class="n">item_inds</span><span class="p">)</span>
+            <span class="p">])</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">stacked_ratings</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rating_matrix</span><span class="p">[</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">knn_indices</span><span class="p">[:,</span> <span class="p">:,</span> <span class="kc">None</span><span class="p">],</span>
+                <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rating_matrix</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">])[</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="p">:]</span>
+            <span class="p">]</span>
+            <span class="n">numerator_matrix</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span>
+                <span class="n">stacked_ratings</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">knn_similarities</span><span class="p">[:,</span> <span class="p">:,</span> <span class="kc">None</span><span class="p">],</span>
+                <span class="n">axis</span><span class="o">=</span><span class="mi">1</span>
+            <span class="p">)</span>
+            <span class="n">denominator_matrix</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span>
+                <span class="p">(</span><span class="n">stacked_ratings</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">knn_similarities</span><span class="p">[:,</span> <span class="p">:,</span> <span class="kc">None</span><span class="p">],</span>
+                <span class="n">axis</span><span class="o">=</span><span class="mi">1</span>
+            <span class="p">)</span>
+            <span class="c1"># https://stackoverflow.com/a/35696047/2680824</span>
+            <span class="k">with</span> <span class="n">np</span><span class="o">.</span><span class="n">errstate</span><span class="p">(</span><span class="n">divide</span><span class="o">=</span><span class="s1">&#39;ignore&#39;</span><span class="p">,</span> <span class="n">invalid</span><span class="o">=</span><span class="s1">&#39;ignore&#39;</span><span class="p">):</span>
+                <span class="n">rating_pred_matrix</span> <span class="o">=</span> <span class="n">numerator_matrix</span> <span class="o">/</span> <span class="n">denominator_matrix</span>
+            <span class="n">rating_pred</span> <span class="o">=</span> <span class="n">rating_pred_matrix</span><span class="p">[</span><span class="n">user_inds</span><span class="p">,</span> <span class="n">item_inds</span><span class="p">]</span>
+        <span class="n">rating_pred</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">rating_pred</span><span class="p">)]</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">X</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">known_user_and_item_mask</span><span class="p">,</span> <span class="s1">&#39;rating&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">rating_pred</span>
+        <span class="k">return</span> <span class="n">X</span><span class="p">[</span><span class="s1">&#39;rating&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="n">X</span><span class="p">[</span><span class="s1">&#39;rating_baseline&#39;</span><span class="p">]</span>
+</pre></div>
+
+</div>
+</div>
+
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="4.-Determine-Optimal-$k$-Values">4. Determine Optimal $k$ Values<a class="anchor-link" href="#4.-Determine-Optimal-$k$-Values">&#182;</a></h1>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[4]:</div>
+
+<div class="collapseheader inner_cell"><span style="font-weight: bold;">Expand Code</span>
+<div class="input_area" style="display:none">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">cart_prod</span><span class="p">(</span><span class="n">df_1</span><span class="p">,</span> <span class="n">df_2</span><span class="p">):</span>
+    <span class="n">df_1</span><span class="p">[</span><span class="s1">&#39;_dummy_&#39;</span><span class="p">],</span> <span class="n">df_2</span><span class="p">[</span><span class="s1">&#39;_dummy_&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span>
+    <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">df_1</span><span class="p">,</span> <span class="n">df_2</span><span class="p">,</span> <span class="n">on</span><span class="o">=</span><span class="s1">&#39;_dummy_&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="s1">&#39;_dummy_&#39;</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+
+</div>
+</div>
+
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[5]:</div>
+
+<div class="collapseheader inner_cell"><span style="font-weight: bold;">Expand Code</span>
+<div class="input_area" style="display:none">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">n_splits</span> <span class="o">=</span> <span class="mi">5</span>
+
+<span class="n">k_list</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">200</span><span class="p">]</span>
+<span class="n">mode_list</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;user&#39;</span><span class="p">,</span> <span class="s1">&#39;item&#39;</span><span class="p">]</span>
+<span class="n">i_fold_list</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">n_splits</span><span class="p">)</span>
+<span class="n">df_1</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">&#39;k&#39;</span><span class="p">:</span> <span class="n">k_list</span><span class="p">})</span>
+<span class="n">df_2</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">&#39;mode&#39;</span><span class="p">:</span> <span class="n">mode_list</span><span class="p">})</span>
+<span class="n">df_3</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">&#39;i_fold&#39;</span><span class="p">:</span> <span class="n">i_fold_list</span><span class="p">})</span>
+<span class="n">results_df</span> <span class="o">=</span> <span class="n">reduce</span><span class="p">(</span><span class="n">cart_prod</span><span class="p">,</span> <span class="p">[</span><span class="n">df_1</span><span class="p">,</span> <span class="n">df_2</span><span class="p">,</span> <span class="n">df_3</span><span class="p">])</span>
+<span class="n">results_df</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+</pre></div>
+
+</div>
+</div>
+
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+<div class="prompt output_prompt">Out[5]:</div>
+
+
+
+<div class="output_html rendered_html output_subarea output_execute_result">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>k</th>
+      <th>mode</th>
+      <th>i_fold</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>1</td>
+      <td>user</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>1</td>
+      <td>user</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>1</td>
+      <td>user</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>1</td>
+      <td>user</td>
+      <td>3</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>1</td>
+      <td>user</td>
+      <td>4</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>1</td>
+      <td>item</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>1</td>
+      <td>item</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>1</td>
+      <td>item</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>1</td>
+      <td>item</td>
+      <td>3</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>1</td>
+      <td>item</td>
+      <td>4</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[6]:</div>
+
+<div class="collapseheader inner_cell"><span style="font-weight: bold;">Expand Code</span>
+<div class="input_area" style="display:none">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">kf</span> <span class="o">=</span> <span class="n">KFold</span><span class="p">(</span><span class="n">n_splits</span><span class="o">=</span><span class="n">n_splits</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">shuffle</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">ratings_df</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+<span class="k">for</span> <span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">mode</span><span class="p">),</span> <span class="n">group</span> <span class="ow">in</span> <span class="n">results_df</span><span class="o">.</span><span class="n">groupby</span><span class="p">([</span><span class="s1">&#39;k&#39;</span><span class="p">,</span> <span class="s1">&#39;mode&#39;</span><span class="p">]):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;k=</span><span class="si">{}</span><span class="s2">, mode=</span><span class="si">{}</span><span class="s2">: i_fold= &quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s1">&#39;k&#39;</span><span class="p">],</span> <span class="n">row</span><span class="p">[</span><span class="s1">&#39;mode&#39;</span><span class="p">]),</span> <span class="n">end</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+    <span class="k">for</span> <span class="p">(</span><span class="n">index</span><span class="p">,</span> <span class="n">row</span><span class="p">),</span> <span class="p">(</span><span class="n">train_inds</span><span class="p">,</span> <span class="n">test_inds</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">group</span><span class="o">.</span><span class="n">iterrows</span><span class="p">(),</span> <span class="n">kf</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">ratings_df</span><span class="p">)):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2">, &quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s1">&#39;i_fold&#39;</span><span class="p">]))</span>
+        <span class="n">train_df</span><span class="p">,</span> <span class="n">test_df</span> <span class="o">=</span> <span class="n">ratings_df</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">train_inds</span><span class="p">],</span> <span class="n">ratings_df</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">test_inds</span><span class="p">]</span>
+        <span class="n">baseline_algo</span> <span class="o">=</span> <span class="n">DampedUserMovieBaselineModel</span><span class="p">(</span><span class="n">damping_factor</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+        <span class="n">t1</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
+        <span class="n">rec</span> <span class="o">=</span> <span class="n">KNNRecommender</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="n">row</span><span class="p">[</span><span class="s1">&#39;mode&#39;</span><span class="p">],</span> <span class="n">k</span><span class="o">=</span><span class="n">row</span><span class="p">[</span><span class="s1">&#39;k&#39;</span><span class="p">],</span> <span class="n">baseline_algo</span><span class="o">=</span><span class="n">baseline_algo</span><span class="p">)</span>
+        <span class="n">rec</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">train_df</span><span class="p">)</span>
+        <span class="n">preds</span> <span class="o">=</span> <span class="n">rec</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">test_df</span><span class="p">[[</span><span class="s1">&#39;userId&#39;</span><span class="p">,</span> <span class="s1">&#39;movieId&#39;</span><span class="p">]])</span>
+        <span class="n">mae</span> <span class="o">=</span> <span class="n">mean_absolute_error</span><span class="p">(</span><span class="n">preds</span><span class="p">,</span> <span class="n">test_df</span><span class="p">[</span><span class="s1">&#39;rating&#39;</span><span class="p">])</span>
+        <span class="n">results_df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">index</span><span class="p">,</span> <span class="s1">&#39;MAE&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">mae</span>
+        <span class="n">dt</span> <span class="o">=</span> <span class="p">(</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span> <span class="o">-</span> <span class="n">t1</span><span class="p">)</span><span class="o">.</span><span class="n">total_seconds</span><span class="p">()</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{:5.3f}</span><span class="s2">   dt=</span><span class="si">{:.2f}</span><span class="s2"> seconds&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">mae</span><span class="p">,</span> <span class="n">dt</span><span class="p">))</span>
+        <span class="n">results_df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">index</span><span class="p">,</span> <span class="s1">&#39;time&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">dt</span>
+</pre></div>
+
+</div>
+</div>
+
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+<div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre class="ipynb">(100000, 4)
+k=1, mode=item, i_fold=0: MAE=0.807   dt=3.55 seconds
+k=1, mode=item, i_fold=1: MAE=0.812   dt=1.68 seconds
+k=1, mode=item, i_fold=2: MAE=0.803   dt=1.62 seconds
+k=1, mode=item, i_fold=3: MAE=0.806   dt=1.60 seconds
+k=1, mode=item, i_fold=4: MAE=0.807   dt=1.81 seconds
+k=1, mode=user, i_fold=0: MAE=0.827   dt=1.68 seconds
+k=1, mode=user, i_fold=1: MAE=0.834   dt=1.66 seconds
+k=1, mode=user, i_fold=2: MAE=0.835   dt=1.53 seconds
+k=1, mode=user, i_fold=3: MAE=0.835   dt=1.26 seconds
+k=1, mode=user, i_fold=4: MAE=0.833   dt=1.59 seconds
+k=2, mode=item, i_fold=0: MAE=0.758   dt=1.90 seconds
+k=2, mode=item, i_fold=1: MAE=0.768   dt=1.59 seconds
+k=2, mode=item, i_fold=2: MAE=0.758   dt=1.52 seconds
+k=2, mode=item, i_fold=3: MAE=0.759   dt=1.45 seconds
+k=2, mode=item, i_fold=4: MAE=0.760   dt=1.50 seconds
+k=2, mode=user, i_fold=0: MAE=0.785   dt=1.31 seconds
+k=2, mode=user, i_fold=1: MAE=0.788   dt=1.32 seconds
+k=2, mode=user, i_fold=2: MAE=0.788   dt=1.35 seconds
+k=2, mode=user, i_fold=3: MAE=0.787   dt=1.33 seconds
+k=2, mode=user, i_fold=4: MAE=0.788   dt=1.26 seconds
+k=5, mode=item, i_fold=0: MAE=0.730   dt=1.41 seconds
+k=5, mode=item, i_fold=1: MAE=0.741   dt=1.51 seconds
+k=5, mode=item, i_fold=2: MAE=0.735   dt=1.65 seconds
+k=5, mode=item, i_fold=3: MAE=0.731   dt=1.39 seconds
+k=5, mode=item, i_fold=4: MAE=0.731   dt=1.67 seconds
+k=5, mode=user, i_fold=0: MAE=0.753   dt=1.56 seconds
+k=5, mode=user, i_fold=1: MAE=0.763   dt=1.64 seconds
+k=5, mode=user, i_fold=2: MAE=0.756   dt=1.35 seconds
+k=5, mode=user, i_fold=3: MAE=0.754   dt=1.31 seconds
+k=5, mode=user, i_fold=4: MAE=0.755   dt=1.44 seconds
+k=10, mode=item, i_fold=0: MAE=0.725   dt=1.59 seconds
+k=10, mode=item, i_fold=1: MAE=0.734   dt=1.66 seconds
+k=10, mode=item, i_fold=2: MAE=0.729   dt=1.76 seconds
+k=10, mode=item, i_fold=3: MAE=0.723   dt=1.56 seconds
+k=10, mode=item, i_fold=4: MAE=0.726   dt=1.44 seconds
+k=10, mode=user, i_fold=0: MAE=0.745   dt=1.37 seconds
+k=10, mode=user, i_fold=1: MAE=0.752   dt=1.38 seconds
+k=10, mode=user, i_fold=2: MAE=0.746   dt=1.75 seconds
+k=10, mode=user, i_fold=3: MAE=0.743   dt=1.32 seconds
+k=10, mode=user, i_fold=4: MAE=0.745   dt=1.27 seconds
+k=20, mode=item, i_fold=0: MAE=0.725   dt=1.49 seconds
+k=20, mode=item, i_fold=1: MAE=0.735   dt=1.51 seconds
+k=20, mode=item, i_fold=2: MAE=0.728   dt=1.52 seconds
+k=20, mode=item, i_fold=3: MAE=0.723   dt=1.38 seconds
+k=20, mode=item, i_fold=4: MAE=0.728   dt=1.71 seconds
+k=20, mode=user, i_fold=0: MAE=0.741   dt=1.30 seconds
+k=20, mode=user, i_fold=1: MAE=0.750   dt=1.31 seconds
+k=20, mode=user, i_fold=2: MAE=0.743   dt=1.31 seconds
+k=20, mode=user, i_fold=3: MAE=0.738   dt=1.30 seconds
+k=20, mode=user, i_fold=4: MAE=0.742   dt=1.34 seconds
+k=50, mode=item, i_fold=0: MAE=0.729   dt=1.48 seconds
+k=50, mode=item, i_fold=1: MAE=0.740   dt=1.50 seconds
+k=50, mode=item, i_fold=2: MAE=0.733   dt=1.48 seconds
+k=50, mode=item, i_fold=3: MAE=0.728   dt=1.41 seconds
+k=50, mode=item, i_fold=4: MAE=0.733   dt=1.43 seconds
+k=50, mode=user, i_fold=0: MAE=0.742   dt=1.30 seconds
+k=50, mode=user, i_fold=1: MAE=0.750   dt=1.34 seconds
+k=50, mode=user, i_fold=2: MAE=0.743   dt=1.35 seconds
+k=50, mode=user, i_fold=3: MAE=0.738   dt=1.34 seconds
+k=50, mode=user, i_fold=4: MAE=0.743   dt=1.36 seconds
+k=100, mode=item, i_fold=0: MAE=0.735   dt=1.50 seconds
+k=100, mode=item, i_fold=1: MAE=0.746   dt=1.50 seconds
+k=100, mode=item, i_fold=2: MAE=0.738   dt=1.79 seconds
+k=100, mode=item, i_fold=3: MAE=0.733   dt=1.59 seconds
+k=100, mode=item, i_fold=4: MAE=0.739   dt=1.51 seconds
+k=100, mode=user, i_fold=0: MAE=0.745   dt=1.36 seconds
+k=100, mode=user, i_fold=1: MAE=0.753   dt=1.31 seconds
+k=100, mode=user, i_fold=2: MAE=0.746   dt=1.31 seconds
+k=100, mode=user, i_fold=3: MAE=0.741   dt=1.46 seconds
+k=100, mode=user, i_fold=4: MAE=0.747   dt=1.58 seconds
+k=200, mode=item, i_fold=0: MAE=0.741   dt=2.06 seconds
+k=200, mode=item, i_fold=1: MAE=0.751   dt=1.55 seconds
+k=200, mode=item, i_fold=2: MAE=0.743   dt=1.55 seconds
+k=200, mode=item, i_fold=3: MAE=0.739   dt=1.54 seconds
+k=200, mode=item, i_fold=4: MAE=0.744   dt=1.73 seconds
+k=200, mode=user, i_fold=0: MAE=0.748   dt=1.43 seconds
+k=200, mode=user, i_fold=1: MAE=0.757   dt=1.43 seconds
+k=200, mode=user, i_fold=2: MAE=0.749   dt=1.39 seconds
+k=200, mode=user, i_fold=3: MAE=0.744   dt=1.34 seconds
+k=200, mode=user, i_fold=4: MAE=0.751   dt=1.35 seconds
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[7]:</div>
+
+<div class="collapseheader inner_cell"><span style="font-weight: bold;">Expand Code</span>
+<div class="input_area" style="display:none">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">baseline_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">&#39;i_fold&#39;</span><span class="p">:</span> <span class="n">i_fold_list</span><span class="p">})</span>
+
+<span class="k">for</span> <span class="p">(</span><span class="n">index</span><span class="p">,</span> <span class="n">row</span><span class="p">),</span> <span class="p">(</span><span class="n">train_inds</span><span class="p">,</span> <span class="n">test_inds</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">baseline_df</span><span class="o">.</span><span class="n">iterrows</span><span class="p">(),</span> <span class="n">kf</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">ratings_df</span><span class="p">)):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;i_fold=</span><span class="si">{}</span><span class="s2">: MAE=&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s1">&#39;i_fold&#39;</span><span class="p">]),</span> <span class="n">end</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+    <span class="n">train_df</span><span class="p">,</span> <span class="n">test_df</span> <span class="o">=</span> <span class="n">ratings_df</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">train_inds</span><span class="p">],</span> <span class="n">ratings_df</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">test_inds</span><span class="p">]</span>
+    <span class="n">baseline_algo</span> <span class="o">=</span> <span class="n">DampedUserMovieBaselineModel</span><span class="p">(</span><span class="n">damping_factor</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+    <span class="n">baseline_algo</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">train_df</span><span class="p">)</span>
+    <span class="n">preds</span> <span class="o">=</span> <span class="n">baseline_algo</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">test_df</span><span class="p">[[</span><span class="s1">&#39;userId&#39;</span><span class="p">,</span> <span class="s1">&#39;movieId&#39;</span><span class="p">]])</span>
+    <span class="n">mae</span> <span class="o">=</span> <span class="n">mean_absolute_error</span><span class="p">(</span><span class="n">preds</span><span class="p">,</span> <span class="n">test_df</span><span class="p">[</span><span class="s1">&#39;rating&#39;</span><span class="p">])</span>
+    <span class="n">baseline_df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">index</span><span class="p">,</span> <span class="s1">&#39;MAE&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">mae</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{:5.3f}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">mae</span><span class="p">))</span>
+</pre></div>
+
+</div>
+</div>
+
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+<div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre class="ipynb">i_fold=0: MAE=0.755
+i_fold=1: MAE=0.765
+i_fold=2: MAE=0.757
+i_fold=3: MAE=0.752
+i_fold=4: MAE=0.759
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[8]:</div>
+
+<div class="collapseheader inner_cell"><span style="font-weight: bold;">Expand Code</span>
+<div class="input_area" style="display:none">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">base_avg</span> <span class="o">=</span> <span class="n">baseline_df</span><span class="p">[</span><span class="s1">&#39;MAE&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+<span class="n">base_std</span> <span class="o">=</span> <span class="n">baseline_df</span><span class="p">[</span><span class="s1">&#39;MAE&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">std</span><span class="p">()</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">pointplot</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">results_df</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">,</span> <span class="n">hue</span><span class="o">=</span><span class="s1">&#39;mode&#39;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s1">&#39;MAE&#39;</span><span class="p">)</span>
+<span class="n">nk</span> <span class="o">=</span> <span class="n">results_df</span><span class="p">[</span><span class="s1">&#39;k&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">nunique</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">([</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">nk</span><span class="p">],</span> <span class="p">[</span><span class="n">base_avg</span><span class="p">,</span> <span class="n">base_avg</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;baseline&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;C2&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">fill_between</span><span class="p">([</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">nk</span><span class="p">],</span> <span class="p">[</span><span class="n">base_avg</span> <span class="o">-</span> <span class="n">base_std</span><span class="p">]</span><span class="o">*</span><span class="mi">2</span><span class="p">,</span> <span class="p">[</span><span class="n">base_avg</span><span class="o">+</span><span class="n">base_std</span><span class="p">]</span><span class="o">*</span><span class="mi">2</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;C2&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.2</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+
+</div>
+</div>
+
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+<div class="prompt"></div>
+
+
+
+
+<div class="output_png output_subarea ">
+<img src="data:image/png;base64,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
+"
+>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Here we can see that Item-based collaborative filtering outperforms User-based collaborative filtering for all $k$. This occurs for the same reason that the Item average baseline performed better than the User average baseline: there are generally more ratings per item than there are ratings per user, since there are more users than movies. (This reverse is true for larger datasets like the <a href="https://grouplens.org/datasets/movielens/20m/">MovieLens 20M Dataset</a> where there are more users than movies.)</p>
+<p>We also see that the best Item-based CF model occurs around $k=10$ while the best User-based CF model occurs around $k=20$. We'll keep these in mind when comparing models later.</p>
+<p>Next, we'll look at matrix factorization methods like Alternating Least Squares, so check out the next post/notebook!</p>
+
+</div>
+</div>
+</div>
+ 
+
+</p>
+            </div>
+            <!-- /.entry-content -->
+<section class="well" id="related-posts">
+    <h4>Part 3 of the MovieLens Project series</h4>
+       <h5>Previous articles</h5>
+       <ul>
+           <li><a href="/projects/exploratory-data-analysis-of-movielens-dataset/">Exploratory Data Analysis of MovieLens Dataset</a></li>
+           <li><a href="/projects/baseline-models-for-collaborative-filtering/">Baseline Models for Collaborative Filtering</a></li>
+       </ul>
+       <h5>Next articles</h5>
+       <ul>
+           <li><a href="/projects/recommending-movies-with-alternating-least-squares/">Recommending Movies with Alternating Least Squares</a></li>
+           <li><a href="/projects/recommending-movies-with-stochastic-gradient-descent/">Recommending Movies with Stochastic Gradient Descent</a></li>
+           <li><a href="/projects/comparing-collaborative-filtering-models/">Comparing Collaborative Filtering Models</a></li>
+       </ul>
+</section>
+    <hr/>
+    <section class="comments" id="comments">
+        <h2>Comments</h2>
+
+        <div id="disqus_thread"></div>
+        <script type="text/javascript">
+            /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+            var disqus_shortname = 'benlindsay'; // required: replace example with your forum shortname
+
+                    var disqus_identifier = 'recommending-movies-with-similarity-based-collaborative-filtering';
+                var disqus_url = '/projects/recommending-movies-with-similarity-based-collaborative-filtering/';
+
+            var disqus_config = function () {
+                this.language = "en";
+            };
+
+            /* * * DON'T EDIT BELOW THIS LINE * * */
+            (function () {
+                var dsq = document.createElement('script');
+                dsq.type = 'text/javascript';
+                dsq.async = true;
+                dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+                (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+            })();
+        </script>
+        <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by
+            Disqus.</a></noscript>
+        <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+    </section>
+        </article>
+    </section>
+
+        </div>
+        <div class="col-sm-3" id="sidebar">
+            <aside>
+<div id="aboutme">
+        <p>
+            <img width="100%" class="img-thumbnail" src="/images/profile.jpg"/>
+        </p>
+    <p>
+        
+Hi! I'm Ben. I'm a PhD student at UPenn, data science enthusiast, and
+co-founder of <a href="http://penndsg.com/">Penn Data Science Group</a>.
+I enjoy hacking around with new tools and finding ways to automate things.
+I am an avid Python user and a diehard Vim nerd. I'll be graduating in 2019.
+
+    </p>
+</div><!-- Sidebar -->
+<section class="well well-sm">
+  <ul class="list-group list-group-flush">
+
+<!-- Sidebar/Social -->
+<li class="list-group-item">
+  <h4><i class="fa fa-home fa-lg"></i><span class="icon-label">Social</span></h4>
+  <ul class="list-group" id="social">
+    <li class="list-group-item"><a href="https://github.com/benlindsay"><i class="fa fa-github-square fa-lg"></i> github</a></li>
+    <li class="list-group-item"><a href="https://www.linkedin.com/in/benjlindsay/"><i class="fa fa-linkedin-square fa-lg"></i> linkedin</a></li>
+    <li class="list-group-item"><a href="mailto:benjlindsay+website@gmail.com"><i class="fa fa-envelope fa-lg"></i> email</a></li>
+    <li class="list-group-item"><a href="https://twitter.com/ben_j_lindsay"><i class="fa fa-twitter-square fa-lg"></i> twitter</a></li>
+  </ul>
+</li>
+<!-- End Sidebar/Social -->
+
+<!-- Sidebar/Tag Cloud -->
+<li class="list-group-item">
+  <a href="/tag/"><h4><i class="fa fa-tags fa-lg"></i><span class="icon-label">Tags</span></h4></a>
+  <ul class="list-group " id="tags">
+    <li class="list-group-item tag-1">
+      <a href="/tag/python/">python</a>
+    </li>
+    <li class="list-group-item tag-5">
+      <a href="/tag/recommender-systems/">recommender systems</a>
+    </li>
+    <li class="list-group-item tag-8">
+      <a href="/tag/pandas/">pandas</a>
+    </li>
+    <li class="list-group-item tag-8">
+      <a href="/tag/jupyter/">jupyter</a>
+    </li>
+    <li class="list-group-item tag-11">
+      <a href="/tag/seaborn/">seaborn</a>
+    </li>
+    <li class="list-group-item tag-35">
+      <a href="/tag/matrix-factorization/">matrix factorization</a>
+    </li>
+    <li class="list-group-item tag-35">
+      <a href="/tag/data-visualization/">data visualization</a>
+    </li>
+    <li class="list-group-item tag-35">
+      <a href="/tag/bash/">bash</a>
+    </li>
+    <li class="list-group-item tag-35">
+      <a href="/tag/productivity/">productivity</a>
+    </li>
+    <li class="list-group-item tag-50">
+      <a href="/tag/k-nearest-neighbors/">k-nearest neighbors</a>
+    </li>
+    <li class="list-group-item tag-50">
+      <a href="/tag/tmux/">tmux</a>
+    </li>
+    <li class="list-group-item tag-50">
+      <a href="/tag/ssh/">ssh</a>
+    </li>
+    <li class="list-group-item tag-50">
+      <a href="/tag/dask/">dask</a>
+    </li>
+    <li class="list-group-item tag-50">
+      <a href="/tag/big-data/">big data</a>
+    </li>
+    <li class="list-group-item tag-50">
+      <a href="/tag/als-wr/">als-wr</a>
+    </li>
+    <li class="list-group-item tag-50">
+      <a href="/tag/machine-learning/">machine learning</a>
+    </li>
+    <li class="list-group-item tag-50">
+      <a href="/tag/numpy/">numpy</a>
+    </li>
+    <li class="list-group-item tag-50">
+      <a href="/tag/d3/">d3</a>
+    </li>
+  </ul>
+</li>
+<!-- End Sidebar/Tag Cloud -->
+  </ul>
+</section>
+<!-- End Sidebar -->            </aside>
+        </div>
+    </div>
+</div>
+<!-- End Content Container -->
+
+<footer>
+   <div class="container">
+      <hr>
+      <div class="row">
+         <div class="col-xs-10">&copy; 2018 Ben Lindsay
+            &middot; Powered by <a href="https://github.com/getpelican/pelican-themes/tree/master/pelican-bootstrap3" target="_blank">pelican-bootstrap3</a>,
+            <a href="http://docs.getpelican.com/" target="_blank">Pelican</a>,
+            <a href="http://getbootstrap.com" target="_blank">Bootstrap</a>         </div>
+         <div class="col-xs-2"><p class="pull-right"><i class="fa fa-arrow-up"></i> <a href="#">Back to top</a></p></div>
+      </div>
+   </div>
+</footer>
+<script src="/theme/js/jquery.min.js"></script>
+
+<!-- Include all compiled plugins (below), or include individual files as needed -->
+<script src="/theme/js/bootstrap.min.js"></script>
+
+<!-- Enable responsive features in IE8 with Respond.js (https://github.com/scottjehl/Respond) -->
+<script src="/theme/js/respond.min.js"></script>
+
+
+    <!-- Disqus -->
+    <!-- <script type="text/javascript"> -->
+    <!--     /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */ -->
+    <!--     var disqus_shortname = 'benlindsay'; // required: replace example with your forum shortname -->
+
+    <!--     /* * * DON'T EDIT BELOW THIS LINE * * */ -->
+    <!--     (function () { -->
+    <!--         var s = document.createElement('script'); -->
+    <!--         s.async = true; -->
+    <!--         s.type = 'text/javascript'; -->
+    <!--         s.src = '//' + disqus_shortname + '.disqus.com/count.js'; -->
+    <!--         (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s); -->
+    <!--     }()); -->
+    <!-- </script> -->
+    <!-- End Disqus Code -->
+    <script>
+    /*
+    var disqus_config = function () {
+        // Replace PAGE_URL with your page's canonical URL variable
+        this.page.url = PAGE_URL;  
+        
+        // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+        this.page.identifier = PAGE_IDENTIFIER; 
+    };
+    */
+    
+    (function() {  // REQUIRED CONFIGURATION VARIABLE: EDIT THE SHORTNAME BELOW
+        var d = document, s = d.createElement('script');
+        
+        // IMPORTANT: Replace EXAMPLE with your forum shortname!
+        s.src = 'https://benlindsay.disqus.com/embed.js';
+        
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+
+<script type="text/javascript">
+jQuery(document).ready(function($) {
+    $("div.collapseheader").click(function () {
+    $header = $(this).children("span").first();
+    $codearea = $(this).children(".input_area");
+    console.log($(this).children());
+    $codearea.slideToggle(500, function () {
+        $header.text(function () {
+            return $codearea.is(":visible") ? "Collapse Code" : "Expand Code";
+        });
+    });
+});
+});
+</script>
+</body>
+</html>

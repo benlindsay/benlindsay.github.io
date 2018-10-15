@@ -197,6 +197,9 @@ init_mathjax();
 
 
 
+    <!-- <link rel="stylesheet" href="cdn.pydata.org/bokeh/release/bokeh-0.12.15.min.css"; type="text/css" /> -->
+    <!-- <script type="text/javascript" src="cdn.pydata.org/bokeh/release/bokeh-0.12.15.min.js"></script> -->
+    <!-- <script type="text/javascript"> Bokeh.set_log_level("info"); </script> -->
 </head>
 <body>
 
@@ -233,11 +236,11 @@ Ben Lindsay            </a>
     <div class="row">
         <div class="col-sm-9">
             <article>
-                <h2><a href="/projects/movielens-project-part-2/">MovieLens Project Part 2</a></h2>
+                <h2><a href="/projects/comparing-collaborative-filtering-models/">Comparing Collaborative Filtering Models</a></h2>
 <footer class="post-info row">
   <div class="col-sm-12">
-    <time class="published" datetime="2018-03-20T23:46:00-04:00">
-      Tue 20 March 2018
+    <time class="published" datetime="2018-10-14T21:45:00-04:00">
+      Sun 14 October 2018
     </time>
     &nbsp; | &nbsp;
     <a href="/projects/"><i class="fa fa-folder-open"></i> Projects</a>
@@ -246,7 +249,7 @@ Ben Lindsay            </a>
 
     <!-- <span class="label label-default">Date</span> -->
     <!-- <span class="published"> -->
-    <!--     <i class="fa fa-calendar"></i><time datetime="2018-03-20T23:46:00-04:00"> Tue 20 March 2018</time> -->
+    <!--     <i class="fa fa-calendar"></i><time datetime="2018-10-14T21:45:00-04:00"> Sun 14 October 2018</time> -->
     <!-- </span> -->
     <!--  -->
 
@@ -270,35 +273,37 @@ Ben Lindsay            </a>
     recommender systems
   </button>
 </a>
-<a href="/tag/jupyter-notebooks/" class="nounderline">
+<a href="/tag/jupyter/" class="nounderline">
   <button type="button" class="btn tag-btn">
-    jupyter notebooks
+    jupyter
+  </button>
+</a>
+<a href="/tag/seaborn/" class="nounderline">
+  <button type="button" class="btn tag-btn">
+    seaborn
   </button>
 </a>
     </div>
     
     <div class="col-sm-12 spacer"></div>
-</footer><!-- /.post-info -->                <div class="summary"><p>
+</footer><!-- /.post-info -->                <div class="summary"><p>This is the sixth post of a project on collaborative filtering based on the MovieLens 100K dataset. The remainder of this post is straight out of a Jupyter Notebook file you can download <a href="/notebooks/2018-10-14_06_Model-Comparisons.ipynb">here</a>. You can also see it <a href="https://github.com/benlindsay/movielens-analysis/blob/master/06_Model-Comparisons.ipynb">here</a> on GitHub.</p>
+<hr>
+<p>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>Baseline models are important for 2 key reaons:</p>
-<ol>
-<li>Baseline models give us a starting point to which to compare all future models, and</li>
-<li>Smart baselines/averages may be needed to fill in missing data for more complicated models</li>
-</ol>
-<p>Here, we'll explore a few typical baseline models for recommender systems and …</p></div></div></div></p>
-                    <a class="btn btn-primary" href="/projects/movielens-project-part-2/">more ...</a>
+<p>Now that I've implemented 3 main classes of …</p></div></div></div></p>
+                    <a class="btn btn-primary" href="/projects/comparing-collaborative-filtering-models/">more ...</a>
                 </div>
             </article>
             <hr/>
             <article>
-                <h2><a href="/projects/movielens-project-part-1/">MovieLens Project Part 1</a></h2>
+                <h2><a href="/projects/recommending-movies-with-stochastic-gradient-descent/">Recommending Movies with Stochastic Gradient Descent</a></h2>
 <footer class="post-info row">
   <div class="col-sm-12">
-    <time class="published" datetime="2018-03-12T17:23:00-04:00">
-      Mon 12 March 2018
+    <time class="published" datetime="2018-10-14T19:22:00-04:00">
+      Sun 14 October 2018
     </time>
     &nbsp; | &nbsp;
     <a href="/projects/"><i class="fa fa-folder-open"></i> Projects</a>
@@ -307,7 +312,274 @@ Ben Lindsay            </a>
 
     <!-- <span class="label label-default">Date</span> -->
     <!-- <span class="published"> -->
-    <!--     <i class="fa fa-calendar"></i><time datetime="2018-03-12T17:23:00-04:00"> Mon 12 March 2018</time> -->
+    <!--     <i class="fa fa-calendar"></i><time datetime="2018-10-14T19:22:00-04:00"> Sun 14 October 2018</time> -->
+    <!-- </span> -->
+    <!--  -->
+
+
+
+
+
+    <div class="col-sm-12">
+<a href="/tag/python/" class="nounderline">
+  <button type="button" class="btn tag-btn">
+    python
+  </button>
+</a>
+<a href="/tag/pandas/" class="nounderline">
+  <button type="button" class="btn tag-btn">
+    pandas
+  </button>
+</a>
+<a href="/tag/recommender-systems/" class="nounderline">
+  <button type="button" class="btn tag-btn">
+    recommender systems
+  </button>
+</a>
+<a href="/tag/jupyter/" class="nounderline">
+  <button type="button" class="btn tag-btn">
+    jupyter
+  </button>
+</a>
+<a href="/tag/seaborn/" class="nounderline">
+  <button type="button" class="btn tag-btn">
+    seaborn
+  </button>
+</a>
+<a href="/tag/matrix-factorization/" class="nounderline">
+  <button type="button" class="btn tag-btn">
+    matrix factorization
+  </button>
+</a>
+    </div>
+    
+    <div class="col-sm-12 spacer"></div>
+</footer><!-- /.post-info -->                <div class="summary"><p>This is the fifth post of a project on collaborative filtering based on the MovieLens 100K dataset. The remainder of this post is straight out of a Jupyter Notebook file you can download <a href="/notebooks/2018-10-14_05_SGD.ipynb">here</a>. You can also see it <a href="https://github.com/benlindsay/movielens-analysis/blob/master/05_SGD.ipynb">here</a> on GitHub.</p>
+<hr>
+<p>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Previously, I showed how to do matrix factorization …</p></div></div></div></p>
+                    <a class="btn btn-primary" href="/projects/recommending-movies-with-stochastic-gradient-descent/">more ...</a>
+                </div>
+            </article>
+            <hr/>
+            <article>
+                <h2><a href="/projects/recommending-movies-with-alternating-least-squares/">Recommending Movies with Alternating Least Squares</a></h2>
+<footer class="post-info row">
+  <div class="col-sm-12">
+    <time class="published" datetime="2018-10-14T16:59:00-04:00">
+      Sun 14 October 2018
+    </time>
+    &nbsp; | &nbsp;
+    <a href="/projects/"><i class="fa fa-folder-open"></i> Projects</a>
+  </div>
+  <div class="spacer"></div>
+
+    <!-- <span class="label label-default">Date</span> -->
+    <!-- <span class="published"> -->
+    <!--     <i class="fa fa-calendar"></i><time datetime="2018-10-14T16:59:00-04:00"> Sun 14 October 2018</time> -->
+    <!-- </span> -->
+    <!--  -->
+
+
+
+
+
+    <div class="col-sm-12">
+<a href="/tag/python/" class="nounderline">
+  <button type="button" class="btn tag-btn">
+    python
+  </button>
+</a>
+<a href="/tag/pandas/" class="nounderline">
+  <button type="button" class="btn tag-btn">
+    pandas
+  </button>
+</a>
+<a href="/tag/recommender-systems/" class="nounderline">
+  <button type="button" class="btn tag-btn">
+    recommender systems
+  </button>
+</a>
+<a href="/tag/jupyter/" class="nounderline">
+  <button type="button" class="btn tag-btn">
+    jupyter
+  </button>
+</a>
+<a href="/tag/seaborn/" class="nounderline">
+  <button type="button" class="btn tag-btn">
+    seaborn
+  </button>
+</a>
+<a href="/tag/matrix-factorization/" class="nounderline">
+  <button type="button" class="btn tag-btn">
+    matrix factorization
+  </button>
+</a>
+    </div>
+    
+    <div class="col-sm-12 spacer"></div>
+</footer><!-- /.post-info -->                <div class="summary"><p>This is the fouth post of a project on collaborative filtering based on the MovieLens 100K dataset. The remainder of this post is straight out of a Jupyter Notebook file you can download <a href="/notebooks/2018-10-14_04_ALS.ipynb">here</a>. You can also see it <a href="https://github.com/benlindsay/movielens-analysis/blob/master/04_ALS.ipynb">here</a> on GitHub.</p>
+<hr>
+<p>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Previously, I showed how to use similarity-based approaches …</p></div></div></div></p>
+                    <a class="btn btn-primary" href="/projects/recommending-movies-with-alternating-least-squares/">more ...</a>
+                </div>
+            </article>
+            <hr/>
+            <article>
+                <h2><a href="/projects/recommending-movies-with-similarity-based-collaborative-filtering/">Recommending Movies with Similarity-Based Collaborative Filtering</a></h2>
+<footer class="post-info row">
+  <div class="col-sm-12">
+    <time class="published" datetime="2018-10-14T16:41:00-04:00">
+      Sun 14 October 2018
+    </time>
+    &nbsp; | &nbsp;
+    <a href="/projects/"><i class="fa fa-folder-open"></i> Projects</a>
+  </div>
+  <div class="spacer"></div>
+
+    <!-- <span class="label label-default">Date</span> -->
+    <!-- <span class="published"> -->
+    <!--     <i class="fa fa-calendar"></i><time datetime="2018-10-14T16:41:00-04:00"> Sun 14 October 2018</time> -->
+    <!-- </span> -->
+    <!--  -->
+
+
+
+
+
+    <div class="col-sm-12">
+<a href="/tag/python/" class="nounderline">
+  <button type="button" class="btn tag-btn">
+    python
+  </button>
+</a>
+<a href="/tag/pandas/" class="nounderline">
+  <button type="button" class="btn tag-btn">
+    pandas
+  </button>
+</a>
+<a href="/tag/recommender-systems/" class="nounderline">
+  <button type="button" class="btn tag-btn">
+    recommender systems
+  </button>
+</a>
+<a href="/tag/jupyter/" class="nounderline">
+  <button type="button" class="btn tag-btn">
+    jupyter
+  </button>
+</a>
+<a href="/tag/seaborn/" class="nounderline">
+  <button type="button" class="btn tag-btn">
+    seaborn
+  </button>
+</a>
+<a href="/tag/k-nearest-neighbors/" class="nounderline">
+  <button type="button" class="btn tag-btn">
+    k-nearest neighbors
+  </button>
+</a>
+    </div>
+    
+    <div class="col-sm-12 spacer"></div>
+</footer><!-- /.post-info -->                <div class="summary"><p>This is the third post of a project on collaborative filtering based on the MovieLens 100K dataset. The remainder of this post is straight out of a Jupyter Notebook file you can download <a href="/notebooks/2018-10-14_03_Similarity-based_CF.ipynb">here</a>. You can also see it <a href="https://github.com/benlindsay/movielens-analysis/blob/master/03_Similarity-based_CF.ipynb">here</a> on GitHub.</p>
+<hr>
+<p>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Now that we've established some simple baseline models …</p></div></div></div></p>
+                    <a class="btn btn-primary" href="/projects/recommending-movies-with-similarity-based-collaborative-filtering/">more ...</a>
+                </div>
+            </article>
+            <hr/>
+            <article>
+                <h2><a href="/projects/baseline-models-for-collaborative-filtering/">Baseline Models for Collaborative Filtering</a></h2>
+<footer class="post-info row">
+  <div class="col-sm-12">
+    <time class="published" datetime="2018-10-14T14:49:00-04:00">
+      Sun 14 October 2018
+    </time>
+    &nbsp; | &nbsp;
+    <a href="/projects/"><i class="fa fa-folder-open"></i> Projects</a>
+  </div>
+  <div class="spacer"></div>
+
+    <!-- <span class="label label-default">Date</span> -->
+    <!-- <span class="published"> -->
+    <!--     <i class="fa fa-calendar"></i><time datetime="2018-10-14T14:49:00-04:00"> Sun 14 October 2018</time> -->
+    <!-- </span> -->
+    <!--  -->
+
+
+
+
+
+    <div class="col-sm-12">
+<a href="/tag/python/" class="nounderline">
+  <button type="button" class="btn tag-btn">
+    python
+  </button>
+</a>
+<a href="/tag/pandas/" class="nounderline">
+  <button type="button" class="btn tag-btn">
+    pandas
+  </button>
+</a>
+<a href="/tag/recommender-systems/" class="nounderline">
+  <button type="button" class="btn tag-btn">
+    recommender systems
+  </button>
+</a>
+<a href="/tag/jupyter/" class="nounderline">
+  <button type="button" class="btn tag-btn">
+    jupyter
+  </button>
+</a>
+<a href="/tag/seaborn/" class="nounderline">
+  <button type="button" class="btn tag-btn">
+    seaborn
+  </button>
+</a>
+    </div>
+    
+    <div class="col-sm-12 spacer"></div>
+</footer><!-- /.post-info -->                <div class="summary"><p>This is the second post of a project on collaborative filtering based on the MovieLens 100K dataset. The remainder of this post is straight out of a Jupyter Notebook file you can download <a href="/notebooks/2018-10-14_02_Baselines.ipynb">here</a>. You can also see it <a href="https://github.com/benlindsay/movielens-analysis/blob/master/02_Baselines.ipynb">here</a> on GitHub.</p>
+<hr>
+<p>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Baseline models are important for 2 key reaons …</p></div></div></div></p>
+                    <a class="btn btn-primary" href="/projects/baseline-models-for-collaborative-filtering/">more ...</a>
+                </div>
+            </article>
+            <hr/>
+            <article>
+                <h2><a href="/projects/exploratory-data-analysis-of-movielens-dataset/">Exploratory Data Analysis of MovieLens Dataset</a></h2>
+<footer class="post-info row">
+  <div class="col-sm-12">
+    <time class="published" datetime="2018-10-14T14:40:00-04:00">
+      Sun 14 October 2018
+    </time>
+    &nbsp; | &nbsp;
+    <a href="/projects/"><i class="fa fa-folder-open"></i> Projects</a>
+  </div>
+  <div class="spacer"></div>
+
+    <!-- <span class="label label-default">Date</span> -->
+    <!-- <span class="published"> -->
+    <!--     <i class="fa fa-calendar"></i><time datetime="2018-10-14T14:40:00-04:00"> Sun 14 October 2018</time> -->
     <!-- </span> -->
     <!--  -->
 
@@ -341,16 +613,16 @@ Ben Lindsay            </a>
     seaborn
   </button>
 </a>
-<a href="/tag/jupyter-notebooks/" class="nounderline">
+<a href="/tag/jupyter/" class="nounderline">
   <button type="button" class="btn tag-btn">
-    jupyter notebooks
+    jupyter
   </button>
 </a>
     </div>
     
     <div class="col-sm-12 spacer"></div>
-</footer><!-- /.post-info -->                <div class="summary"><p>I'm beginning a project on the <a href="https://grouplens.org/datasets/movielens/">MovieLens</a> dataset to learn about collaborative filtering algorithms. This is Part 1 of this project, where I do an initial exploratory data analysis to see what the data looks like. The remainder of this post is straight out of a Jupyter Notebook file you …</p>
-                    <a class="btn btn-primary" href="/projects/movielens-project-part-1/">more ...</a>
+</footer><!-- /.post-info -->                <div class="summary"><p>This is the first post of a project on the <a href="https://grouplens.org/datasets/movielens/">MovieLens</a> dataset to learn about collaborative filtering algorithms. Here, I do an exploratory data analysis to see what the data looks like. The remainder of this post is straight out of a Jupyter Notebook file you can download <a href="/notebooks/2018-10-14_01_Exploratory-Analysis-on-100K-data.ipynb">here</a>. You …</p>
+                    <a class="btn btn-primary" href="/projects/exploratory-data-analysis-of-movielens-dataset/">more ...</a>
                 </div>
             </article>
             <hr/>
@@ -498,38 +770,41 @@ I am an avid Python user and a diehard Vim nerd. I'll be graduating in 2019.
 <li class="list-group-item">
   <a href="/tag/"><h4><i class="fa fa-tags fa-lg"></i><span class="icon-label">Tags</span></h4></a>
   <ul class="list-group " id="tags">
-    <li class="list-group-item tag-0">
+    <li class="list-group-item tag-1">
       <a href="/tag/python/">python</a>
     </li>
-    <li class="list-group-item tag-12">
+    <li class="list-group-item tag-5">
       <a href="/tag/recommender-systems/">recommender systems</a>
     </li>
-    <li class="list-group-item tag-19">
+    <li class="list-group-item tag-8">
       <a href="/tag/pandas/">pandas</a>
     </li>
-    <li class="list-group-item tag-31">
-      <a href="/tag/bash/">bash</a>
+    <li class="list-group-item tag-8">
+      <a href="/tag/jupyter/">jupyter</a>
     </li>
-    <li class="list-group-item tag-31">
-      <a href="/tag/productivity/">productivity</a>
+    <li class="list-group-item tag-11">
+      <a href="/tag/seaborn/">seaborn</a>
     </li>
-    <li class="list-group-item tag-31">
-      <a href="/tag/jupyter-notebooks/">jupyter notebooks</a>
+    <li class="list-group-item tag-35">
+      <a href="/tag/matrix-factorization/">matrix factorization</a>
     </li>
-    <li class="list-group-item tag-31">
+    <li class="list-group-item tag-35">
       <a href="/tag/data-visualization/">data visualization</a>
     </li>
+    <li class="list-group-item tag-35">
+      <a href="/tag/bash/">bash</a>
+    </li>
+    <li class="list-group-item tag-35">
+      <a href="/tag/productivity/">productivity</a>
+    </li>
     <li class="list-group-item tag-50">
-      <a href="/tag/jupyter/">jupyter</a>
+      <a href="/tag/k-nearest-neighbors/">k-nearest neighbors</a>
     </li>
     <li class="list-group-item tag-50">
       <a href="/tag/tmux/">tmux</a>
     </li>
     <li class="list-group-item tag-50">
       <a href="/tag/ssh/">ssh</a>
-    </li>
-    <li class="list-group-item tag-50">
-      <a href="/tag/seaborn/">seaborn</a>
     </li>
     <li class="list-group-item tag-50">
       <a href="/tag/dask/">dask</a>
@@ -582,20 +857,41 @@ I am an avid Python user and a diehard Vim nerd. I'll be graduating in 2019.
 
 
     <!-- Disqus -->
-    <script type="text/javascript">
-        /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
-        var disqus_shortname = 'benlindsay'; // required: replace example with your forum shortname
+    <!-- <script type="text/javascript"> -->
+    <!--     /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */ -->
+    <!--     var disqus_shortname = 'benlindsay'; // required: replace example with your forum shortname -->
 
-        /* * * DON'T EDIT BELOW THIS LINE * * */
-        (function () {
-            var s = document.createElement('script');
-            s.async = true;
-            s.type = 'text/javascript';
-            s.src = '//' + disqus_shortname + '.disqus.com/count.js';
-            (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
-        }());
-    </script>
+    <!--     /* * * DON'T EDIT BELOW THIS LINE * * */ -->
+    <!--     (function () { -->
+    <!--         var s = document.createElement('script'); -->
+    <!--         s.async = true; -->
+    <!--         s.type = 'text/javascript'; -->
+    <!--         s.src = '//' + disqus_shortname + '.disqus.com/count.js'; -->
+    <!--         (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s); -->
+    <!--     }()); -->
+    <!-- </script> -->
     <!-- End Disqus Code -->
+    <script>
+    /*
+    var disqus_config = function () {
+        // Replace PAGE_URL with your page's canonical URL variable
+        this.page.url = PAGE_URL;  
+        
+        // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+        this.page.identifier = PAGE_IDENTIFIER; 
+    };
+    */
+    
+    (function() {  // REQUIRED CONFIGURATION VARIABLE: EDIT THE SHORTNAME BELOW
+        var d = document, s = d.createElement('script');
+        
+        // IMPORTANT: Replace EXAMPLE with your forum shortname!
+        s.src = 'https://benlindsay.disqus.com/embed.js';
+        
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
 
 <script type="text/javascript">
 jQuery(document).ready(function($) {
