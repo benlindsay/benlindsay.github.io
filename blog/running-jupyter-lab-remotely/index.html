@@ -313,15 +313,15 @@ Ben Lindsay            </a>
 <p>Instead, I just want to share how to run Jupyter Lab efficiently on a remote machine. I have a research cluster where I do most of my analyses for my PhD work, and running Jupyter Lab directly on the cluster means I don't have to copy files betw een the cluster and my desktop.</p>
 <h2>The basic commands</h2>
 <p>To run Jupyter Lab on a remote machine, you need to open 2 terminal windows. In the first window:</p>
-<div class="highlight"><pre><span></span>$ ssh username@hostname
-$ jupyter lab --no-browser --port<span class="o">=</span><span class="m">8888</span>
+<div class="highlight"><pre><span></span>$ <span class="nv">ssh</span> <span class="nv">username</span>@<span class="nv">hostname</span>
+$ <span class="nv">jupyter</span> <span class="nv">lab</span> <span class="o">--</span><span class="nv">no</span><span class="o">-</span><span class="nv">browser</span> <span class="o">--</span><span class="nv">port</span><span class="o">=</span><span class="mi">8888</span>
 ...
-<span class="o">[</span>I <span class="m">10</span>:17:14.160 LabApp<span class="o">]</span> Use Control-C to stop this server and shut down all kernels <span class="o">(</span>twice to skip confirmation<span class="o">)</span>.
-<span class="o">[</span>C <span class="m">10</span>:17:14.160 LabApp<span class="o">]</span>
+[<span class="nv">I</span> <span class="mi">10</span>:<span class="mi">17</span>:<span class="mi">14</span>.<span class="mi">160</span> <span class="nv">LabApp</span>] <span class="nv">Use</span> <span class="nv">Control</span><span class="o">-</span><span class="nv">C</span> <span class="nv">to</span> <span class="nv">stop</span> <span class="nv">this</span> <span class="nv">server</span> <span class="nv">and</span> <span class="nv">shut</span> <span class="nv">down</span> <span class="nv">all</span> <span class="nv">kernels</span> <span class="ss">(</span><span class="nv">twice</span> <span class="nv">to</span> <span class="nv">skip</span> <span class="nv">confirmation</span><span class="ss">)</span>.
+[<span class="nv">C</span> <span class="mi">10</span>:<span class="mi">17</span>:<span class="mi">14</span>.<span class="mi">160</span> <span class="nv">LabApp</span>]
 
-    Copy/paste this URL into your browser when you connect <span class="k">for</span> the first time,
-    to login with a token:
-        http://localhost:8888/?token<span class="o">=</span>b6ff64ea67275581a2ec91790e1ed591c945f30ee0f7a214
+    <span class="nv">Copy</span><span class="o">/</span><span class="nv">paste</span> <span class="nv">this</span> <span class="nv">URL</span> <span class="nv">into</span> <span class="nv">your</span> <span class="nv">browser</span> <span class="nv">when</span> <span class="nv">you</span> <span class="k">connect</span> <span class="k">for</span> <span class="nv">the</span> <span class="nv">first</span> <span class="nv">time</span>,
+    <span class="nv">to</span> <span class="nv">login</span> <span class="nv">with</span> <span class="nv">a</span> <span class="nv">token</span>:
+        <span class="nv">http</span>:<span class="o">//</span><span class="nv">localhost</span>:<span class="mi">8888</span><span class="o">/</span>?<span class="nv">token</span><span class="o">=</span><span class="nv">b6ff64ea67275581a2ec91790e1ed591c945f30ee0f7a214</span>
 </pre></div>
 
 
@@ -331,7 +331,7 @@ $ jupyter lab --no-browser --port<span class="o">=</span><span class="m">8888</s
 
 
 <p>Then in your web browser of choice, copy</p>
-<div class="highlight"><pre><span></span>http://localhost:8888/?token=b6ff64ea67275581a2ec91790e1ed591c945f30ee0f7a214
+<div class="highlight"><pre><span></span><span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">localhost</span><span class="p">:</span><span class="mi">8888</span><span class="o">/?</span><span class="n">token</span><span class="o">=</span><span class="n">b6ff64ea67275581a2ec91790e1ed591c945f30ee0f7a214</span>
 </pre></div>
 
 
@@ -339,22 +339,22 @@ $ jupyter lab --no-browser --port<span class="o">=</span><span class="m">8888</s
 <p>All that is kind of a lot just to open up Jupyter Lab. So I found ways to significantly simplify the process from both the remote and local side.</p>
 <h2>Simplfying the remote side</h2>
 <p>To make things easier on the remote machine side of things, <code>tmux</code> (or <code>screen</code>) and aliases really come in handy. I like to have as Jupyter Lab session running constantly in my remote machine whether I'm logged in or not. Then I can just ssh tunnel in to the existing session whenever I want! To do this, I simply do the following:</p>
-<div class="highlight"><pre><span></span>$ ssh username@hostname
-$ tmux
-<span class="o">[</span> opens persistent shell session <span class="o">]</span>
-$ jlremote
+<div class="highlight"><pre><span></span>$ <span class="nv">ssh</span> <span class="nv">username</span>@<span class="nv">hostname</span>
+$ <span class="nv">tmux</span>
+[ <span class="nv">opens</span> <span class="nv">persistent</span> <span class="nv">shell</span> <span class="nv">session</span> ]
+$ <span class="nv">jlremote</span>
 ...
-<span class="o">[</span>I <span class="m">10</span>:17:14.160 LabApp<span class="o">]</span> Use Control-C to stop this server and shut down all kernels <span class="o">(</span>twice to skip confirmation<span class="o">)</span>.
-<span class="o">[</span>C <span class="m">10</span>:17:14.160 LabApp<span class="o">]</span>
+[<span class="nv">I</span> <span class="mi">10</span>:<span class="mi">17</span>:<span class="mi">14</span>.<span class="mi">160</span> <span class="nv">LabApp</span>] <span class="nv">Use</span> <span class="nv">Control</span><span class="o">-</span><span class="nv">C</span> <span class="nv">to</span> <span class="nv">stop</span> <span class="nv">this</span> <span class="nv">server</span> <span class="nv">and</span> <span class="nv">shut</span> <span class="nv">down</span> <span class="nv">all</span> <span class="nv">kernels</span> <span class="ss">(</span><span class="nv">twice</span> <span class="nv">to</span> <span class="nv">skip</span> <span class="nv">confirmation</span><span class="ss">)</span>.
+[<span class="nv">C</span> <span class="mi">10</span>:<span class="mi">17</span>:<span class="mi">14</span>.<span class="mi">160</span> <span class="nv">LabApp</span>]
 
-    Copy/paste this URL into your browser when you connect <span class="k">for</span> the first time,
-    to login with a token:
-        http://localhost:8888/?token<span class="o">=</span>b6ff64ea67275581a2ec91790e1ed591c945f30ee0f7a214
+    <span class="nv">Copy</span><span class="o">/</span><span class="nv">paste</span> <span class="nv">this</span> <span class="nv">URL</span> <span class="nv">into</span> <span class="nv">your</span> <span class="nv">browser</span> <span class="nv">when</span> <span class="nv">you</span> <span class="k">connect</span> <span class="k">for</span> <span class="nv">the</span> <span class="nv">first</span> <span class="nv">time</span>,
+    <span class="nv">to</span> <span class="nv">login</span> <span class="nv">with</span> <span class="nv">a</span> <span class="nv">token</span>:
+        <span class="nv">http</span>:<span class="o">//</span><span class="nv">localhost</span>:<span class="mi">8888</span><span class="o">/</span>?<span class="nv">token</span><span class="o">=</span><span class="nv">b6ff64ea67275581a2ec91790e1ed591c945f30ee0f7a214</span>
 </pre></div>
 
 
 <p>I have <code>jlremote</code> defined as an alias in my remote <code>~/.bashrc</code> file like so:</p>
-<div class="highlight"><pre><span></span>alias jlremote=&#39;jupyter lab --no-browser --port=8888&#39;
+<div class="highlight"><pre><span></span><span class="k">alias</span> <span class="n">jlremote</span><span class="o">=</span><span class="s1">&#39;jupyter lab --no-browser --port=8888&#39;</span>
 </pre></div>
 
 
@@ -362,33 +362,33 @@ $ jlremote
 <p>Now let's deal with the local stuff.</p>
 <h2>Simplfying the local side</h2>
 <p>On the local side, I wanted to be able to just run a single command like <code>jllocal</code> to open Jupyter Lab, so I wrote a bash function that goes in my local <code>~/.bashrc</code> file. If you use this make sure to edit all the all-caps stuff, like <code>USERNAME</code>, <code>HOSTNAME</code>, and <code>REMOTE/PATH/TO/jupyter</code>. The Jupyter path should be something like <code>~/anaconda3/bin/jupyter</code>.</p>
-<div class="highlight"><pre><span></span><span class="kd">function</span> <span class="nx">jllocal</span> <span class="p">{</span>
-  <span class="nx">cmd</span><span class="o">=</span><span class="s2">&quot;ssh -Y -fN -L localhost:8888:localhost:8888 USERNAME@HOSTNAME&quot;</span>
-  <span class="nx">running_cmds</span><span class="o">=</span><span class="nx">$</span><span class="p">(</span><span class="nx">ps</span> <span class="nx">aux</span> <span class="o">|</span> <span class="nx">grep</span> <span class="o">-</span><span class="nx">v</span> <span class="nx">grep</span> <span class="o">|</span> <span class="nx">grep</span> <span class="s2">&quot;$cmd&quot;</span><span class="p">)</span>
-  <span class="k">if</span> <span class="p">[[</span> <span class="s2">&quot;$1&quot;</span> <span class="o">==</span> <span class="s1">&#39;kill&#39;</span> <span class="p">]];</span> <span class="nx">then</span>
-    <span class="k">if</span> <span class="p">[</span> <span class="o">!</span> <span class="o">-</span><span class="nx">z</span> <span class="nx">$running_cmds</span> <span class="p">];</span> <span class="nx">then</span>
-      <span class="k">for</span> <span class="nx">pid</span> <span class="k">in</span> <span class="nx">$</span><span class="p">(</span><span class="nx">echo</span> <span class="nx">$running_cmds</span> <span class="o">|</span> <span class="nx">awk</span> <span class="s1">&#39;{print $2}&#39;</span><span class="p">);</span> <span class="k">do</span>
-        <span class="nx">echo</span> <span class="s2">&quot;killing pid $pid&quot;</span>
-        <span class="nx">kill</span> <span class="o">-</span><span class="mi">9</span> <span class="nx">$pid</span>
-      <span class="nx">done</span>
+<div class="highlight"><pre><span></span><span class="nv">function</span> <span class="nv">jllocal</span> {
+  <span class="nv">cmd</span><span class="o">=</span><span class="s2">&quot;</span><span class="s">ssh -Y -fN -L localhost:8888:localhost:8888 USERNAME@HOSTNAME</span><span class="s2">&quot;</span>
+  <span class="nv">running_cmds</span><span class="o">=</span>$<span class="ss">(</span><span class="nv">ps</span> <span class="nv">aux</span> <span class="o">|</span> <span class="nv">grep</span> <span class="o">-</span><span class="nv">v</span> <span class="nv">grep</span> <span class="o">|</span> <span class="nv">grep</span> <span class="s2">&quot;</span><span class="s">$cmd</span><span class="s2">&quot;</span><span class="ss">)</span>
+  <span class="k">if</span> [[ <span class="s2">&quot;</span><span class="s">$1</span><span class="s2">&quot;</span> <span class="o">==</span> <span class="s1">&#39;</span><span class="s">kill</span><span class="s1">&#39;</span> ]]<span class="c1">; then</span>
+    <span class="k">if</span> [ <span class="o">!</span> <span class="o">-</span><span class="nv">z</span> $<span class="nv">running_cmds</span> ]<span class="c1">; then</span>
+      <span class="k">for</span> <span class="nv">pid</span> <span class="nv">in</span> $<span class="ss">(</span><span class="nv">echo</span> $<span class="nv">running_cmds</span> <span class="o">|</span> <span class="nv">awk</span> <span class="s1">&#39;</span><span class="s">{print $2}</span><span class="s1">&#39;</span><span class="ss">)</span><span class="c1">; do</span>
+        <span class="nv">echo</span> <span class="s2">&quot;</span><span class="s">killing pid $pid</span><span class="s2">&quot;</span>
+        <span class="nv">kill</span> <span class="o">-</span><span class="mi">9</span> $<span class="nv">pid</span>
+      <span class="nv">done</span>
     <span class="k">else</span>
-      <span class="nx">echo</span> <span class="s2">&quot;No jllocal commands to kill.&quot;</span>
-    <span class="nx">fi</span>
+      <span class="nv">echo</span> <span class="s2">&quot;</span><span class="s">No jllocal commands to kill.</span><span class="s2">&quot;</span>
+    <span class="nv">fi</span>
   <span class="k">else</span>
-    <span class="k">if</span> <span class="p">[</span> <span class="o">!</span> <span class="o">-</span><span class="nx">z</span> <span class="nx">$n_running_cmds</span> <span class="p">];</span> <span class="nx">then</span>
-      <span class="nx">echo</span> <span class="s2">&quot;jllocal command is still running. Kill with &#39;jllocal kill&#39; next time.&quot;</span>
+    <span class="k">if</span> [ <span class="o">!</span> <span class="o">-</span><span class="nv">z</span> $<span class="nv">n_running_cmds</span> ]<span class="c1">; then</span>
+      <span class="nv">echo</span> <span class="s2">&quot;</span><span class="s">jllocal command is still running. Kill with &#39;jllocal kill&#39; next time.</span><span class="s2">&quot;</span>
     <span class="k">else</span>
-      <span class="nx">echo</span> <span class="s2">&quot;Running command &#39;$cmd&#39;&quot;</span>
-      <span class="nb">eval</span> <span class="s2">&quot;$cmd&quot;</span>
-    <span class="nx">fi</span>
-    <span class="nx">url</span><span class="o">=</span><span class="nx">$</span><span class="p">(</span><span class="nx">ssh</span> <span class="nx">USERNAME</span><span class="kd">@HOSTNAME</span> <span class="o">\</span>
-            <span class="s1">&#39;/REMOTE/PATH/TO/jupyter notebook list&#39;</span> <span class="o">\</span>
-            <span class="o">|</span> <span class="nx">grep</span> <span class="nx">http</span> <span class="o">|</span> <span class="nx">awk</span> <span class="s1">&#39;{print $1}&#39;</span><span class="p">)</span>
-    <span class="nx">echo</span> <span class="s2">&quot;URL that will open in your browser:&quot;</span>
-    <span class="nx">echo</span> <span class="s2">&quot;$url&quot;</span>
-    <span class="nx">open</span> <span class="s2">&quot;$url&quot;</span>
-  <span class="nx">fi</span>
-<span class="p">}</span>
+      <span class="nv">echo</span> <span class="s2">&quot;</span><span class="s">Running command &#39;$cmd&#39;</span><span class="s2">&quot;</span>
+      <span class="nv">eval</span> <span class="s2">&quot;</span><span class="s">$cmd</span><span class="s2">&quot;</span>
+    <span class="nv">fi</span>
+    <span class="nv">url</span><span class="o">=</span>$<span class="ss">(</span><span class="nv">ssh</span> <span class="nv">USERNAME</span>@<span class="nv">HOSTNAME</span> \
+            <span class="s1">&#39;</span><span class="s">/REMOTE/PATH/TO/jupyter notebook list</span><span class="s1">&#39;</span> \
+            <span class="o">|</span> <span class="nv">grep</span> <span class="nv">http</span> <span class="o">|</span> <span class="nv">awk</span> <span class="s1">&#39;</span><span class="s">{print $1}</span><span class="s1">&#39;</span><span class="ss">)</span>
+    <span class="nv">echo</span> <span class="s2">&quot;</span><span class="s">URL that will open in your browser:</span><span class="s2">&quot;</span>
+    <span class="nv">echo</span> <span class="s2">&quot;</span><span class="s">$url</span><span class="s2">&quot;</span>
+    <span class="nv">open</span> <span class="s2">&quot;</span><span class="s">$url</span><span class="s2">&quot;</span>
+  <span class="nv">fi</span>
+}
 </pre></div>
 
 
@@ -474,22 +474,22 @@ I am an avid Python user and a diehard Vim nerd. I'll be graduating in 2019.
     <li class="list-group-item tag-1">
       <a href="/tag/python/">python</a>
     </li>
-    <li class="list-group-item tag-5">
+    <li class="list-group-item tag-7">
       <a href="/tag/recommender-systems/">recommender systems</a>
     </li>
-    <li class="list-group-item tag-8">
+    <li class="list-group-item tag-10">
       <a href="/tag/pandas/">pandas</a>
     </li>
-    <li class="list-group-item tag-8">
+    <li class="list-group-item tag-10">
       <a href="/tag/jupyter/">jupyter</a>
     </li>
-    <li class="list-group-item tag-11">
+    <li class="list-group-item tag-13">
       <a href="/tag/seaborn/">seaborn</a>
     </li>
-    <li class="list-group-item tag-11">
+    <li class="list-group-item tag-13">
       <a href="/tag/matplotlib/">matplotlib</a>
     </li>
-    <li class="list-group-item tag-26">
+    <li class="list-group-item tag-27">
       <a href="/tag/matrix-factorization/">matrix factorization</a>
     </li>
     <li class="list-group-item tag-35">
@@ -503,6 +503,15 @@ I am an avid Python user and a diehard Vim nerd. I'll be graduating in 2019.
     </li>
     <li class="list-group-item tag-35">
       <a href="/tag/productivity/">productivity</a>
+    </li>
+    <li class="list-group-item tag-50">
+      <a href="/tag/aws/">aws</a>
+    </li>
+    <li class="list-group-item tag-50">
+      <a href="/tag/django/">django</a>
+    </li>
+    <li class="list-group-item tag-50">
+      <a href="/tag/docker/">docker</a>
     </li>
     <li class="list-group-item tag-50">
       <a href="/tag/tmux/">tmux</a>
@@ -522,12 +531,6 @@ I am an avid Python user and a diehard Vim nerd. I'll be graduating in 2019.
     <li class="list-group-item tag-50">
       <a href="/tag/machine-learning/">machine learning</a>
     </li>
-    <li class="list-group-item tag-50">
-      <a href="/tag/numpy/">numpy</a>
-    </li>
-    <li class="list-group-item tag-50">
-      <a href="/tag/d3/">d3</a>
-    </li>
   </ul>
 </li>
 <!-- End Sidebar/Tag Cloud -->
@@ -543,7 +546,7 @@ I am an avid Python user and a diehard Vim nerd. I'll be graduating in 2019.
    <div class="container">
       <hr>
       <div class="row">
-         <div class="col-xs-10">&copy; 2018 Ben Lindsay
+         <div class="col-xs-10">&copy; 2019 Ben Lindsay
             &middot; Powered by <a href="https://github.com/getpelican/pelican-themes/tree/master/pelican-bootstrap3" target="_blank">pelican-bootstrap3</a>,
             <a href="http://docs.getpelican.com/" target="_blank">Pelican</a>,
             <a href="http://getbootstrap.com" target="_blank">Bootstrap</a>         </div>
