@@ -2,46 +2,46 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://benjlindsay.com/about.html</loc>
-    <lastmod>2022-12-01T04:19:29.894Z</lastmod>
+    <lastmod>2022-12-01T15:45:54.555Z</lastmod>
   </url>
   <url>
     <loc>https://benjlindsay.com/index.html</loc>
-    <lastmod>2022-12-01T04:19:30.818Z</lastmod>
+    <lastmod>2022-12-01T15:45:55.519Z</lastmod>
   </url>
   <url>
     <loc>https://benjlindsay.com/posts/interactive-d3-map-of-baby-name-popularity/index.html</loc>
-    <lastmod>2022-12-01T04:19:31.178Z</lastmod>
+    <lastmod>2022-12-01T15:45:55.891Z</lastmod>
   </url>
   <url>
     <loc>https://benjlindsay.com/posts/profiling-jupyter-code-with-py-spy/index.html</loc>
-    <lastmod>2022-12-01T04:19:31.554Z</lastmod>
+    <lastmod>2022-12-01T15:45:56.299Z</lastmod>
   </url>
   <url>
     <loc>https://benjlindsay.com/posts/comparing-collaborative-filtering-methods/index.html</loc>
-    <lastmod>2022-12-01T04:19:32.250Z</lastmod>
+    <lastmod>2022-12-01T15:45:57.003Z</lastmod>
   </url>
   <url>
     <loc>https://benjlindsay.com/posts/analyzing-larger-than-memory-data-on-your-laptop/index.html</loc>
-    <lastmod>2022-12-01T04:19:32.658Z</lastmod>
+    <lastmod>2022-12-01T15:45:57.411Z</lastmod>
   </url>
   <url>
     <loc>https://benjlindsay.com/posts/dealing-with-grid-data-in-python/index.html</loc>
-    <lastmod>2022-12-01T04:19:33.210Z</lastmod>
+    <lastmod>2022-12-01T15:45:57.991Z</lastmod>
   </url>
   <url>
     <loc>https://benjlindsay.com/posts/taking-advantage-of-sparsity-in-als-wr-algorithm/index.html</loc>
-    <lastmod>2022-12-01T04:19:33.610Z</lastmod>
+    <lastmod>2022-12-01T15:45:58.407Z</lastmod>
   </url>
   <url>
     <loc>https://benjlindsay.com/posts/parameter-sweep-bash-script/index.html</loc>
-    <lastmod>2022-12-01T04:19:34.210Z</lastmod>
+    <lastmod>2022-12-01T15:45:59.015Z</lastmod>
   </url>
   <url>
     <loc>https://benjlindsay.com/posts/deploying-cookiecutter-django-site-on-aws/index.html</loc>
-    <lastmod>2022-12-01T04:19:35.010Z</lastmod>
+    <lastmod>2022-12-01T15:45:59.847Z</lastmod>
   </url>
   <url>
     <loc>https://benjlindsay.com/posts/running-jupyter-lab-remotely/index.html</loc>
-    <lastmod>2022-12-01T04:19:35.710Z</lastmod>
+    <lastmod>2022-12-01T15:46:00.583Z</lastmod>
   </url>
 </urlset>
