@@ -13,7 +13,7 @@ about:
     - icon: linkedin
       text: LinkedIn
       href: https://linkedin.com/in/benjlindsay
-
+comments: false
 ---
 
 I'm a data scientist in the Twin Cities. I got into data science through
